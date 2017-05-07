@@ -11,9 +11,9 @@ from utils.choices import *
 class PersonalAssistant(TimeStampedModel):
     user = models.OneToOneField(User)
     phone_number = PhoneNumberField()
-    available_days = MultiSelectField(choices=WEEK_DAYS_CHOICES)
-    start_time = models.TimeField()
-    end_time = models.TimeField()
+    available_days = MultiSelectField(choices=WEEK_DAYS_CHOICES, blank=True, null=True)
+    start_time = models.TimeField(blank=True, null=True)
+    end_time = models.TimeField(blank=True, null=True)
 
     def __str__(self):
         return "{0}-{1}".format(self.user, self.phone_number)

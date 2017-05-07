@@ -10,9 +10,9 @@ from utils.choices import APPOINTMENT_STATUS_CHOICES
 class Shopper(TimeStampedModel):
     user = models.OneToOneField(User)
     phone_number = PhoneNumberField()
-    allergies = models.CharField(max_length=200)
-    brand_preferred = models.CharField(max_length=200)
-    instruction = models.TextField()
+    allergies = models.CharField(max_length=200, blank=True, null=True)
+    brand_preferred = models.CharField(max_length=200, blank=True, null=True)
+    instruction = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return "{0}-{1}".format(self.user, self.phone_number)

@@ -1,9 +1,20 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 from django_extensions.db.models import TimeStampedModel
 from multiselectfield.db.fields import MultiSelectField
+from phonenumber_field.modelfields import PhoneNumberField
 
 from utils.choices import *
+
+
+class StoreAdmin(TimeStampedModel):
+    user = models.OneToOneField(User)
+    phone_number = PhoneNumberField()
+
+    def __str__(self):
+        return "{0}-{1}".format(self.user, self.phone_number)
 
 
 class Store(TimeStampedModel):
