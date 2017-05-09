@@ -1,16 +1,14 @@
 from django.contrib.auth.models import User
-
-from rest_framework.viewsets import ModelViewSet
+from rest_auth.app_settings import create_token
+from rest_auth.models import TokenModel
+from rest_framework import status
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework import status
-from rest_auth.models import TokenModel
-
+from rest_framework.viewsets import ModelViewSet
 
 from apps.api.serializers import UserSerializer
-
-from rest_auth.app_settings import create_token
+from utils.filters import UserFilterSet
 
 
 class SignUPView(CreateAPIView):
@@ -38,3 +36,5 @@ class SignUPView(CreateAPIView):
 class UserViewSet(ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
+    filter_class = UserFilterSet
+
