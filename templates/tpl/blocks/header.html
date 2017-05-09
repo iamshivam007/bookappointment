@@ -1,0 +1,50 @@
+{% verbatim %}
+<!-- navbar header -->
+<div class="navbar-header {{app.settings.navbarHeaderColor}}">
+  <button class="pull-right visible-xs" ui-toggle-class="off-screen" data-target=".app-aside" ui-scroll-to="app">
+    <i class="glyphicon glyphicon-align-justify"></i>
+  </button>
+  <!-- brand -->
+  <a class="navbar-brand text-lt" ui-sref="app.home">
+    <i class="fa fa-cloud" style="color:#ff5252;"></i>
+    <span class="hidden-folded m-l-xs">Shopper Stop</span>
+  </a>
+  <!-- / brand -->
+</div>
+<!-- / navbar header -->
+<!-- navbar collapse -->
+<div class="collapse pos-rlt navbar-collapse box-shadow {{app.settings.navbarCollapseColor}}">
+  <!-- link and dropdown -->
+  <!-- nabar right -->
+  <ul ng-if="user.fullName" class="nav navbar-nav navbar-right" ng-controller="HeaderController">
+    <li class="dropdown" dropdown>
+      <!--<div ng-if="user.fullName">-->
+        <a href class="dropdown-toggle clear" dropdown-toggle>
+          <span class="hidden-sm hidden-md">{{ user.fullName }}</span> <b class="caret"></b>
+        </a>
+        <!-- dropdown -->
+        <ul class="dropdown-menu animated fadeInRight w">
+          <li>
+            <a ui-sref="access.logout">Logout</a>
+          </li>
+        </ul>
+      <!--</div>-->
+      <!-- / dropdown -->
+    </li>
+  </ul>
+  <ul ng-if="!user.fullName" class="nav navbar-nav navbar-right" ng-controller="HeaderController">
+    <li>
+      <a ui-sref="access.login">
+        <span class="hidden-sm hidden-md"><b>Login</b></span>
+      </a>
+    </li>
+    <li>
+      <a ui-sref="access.login">
+        <span class="hidden-sm hidden-md"><b>Register</b></span>
+      </a>
+    </li>
+  </ul>
+  <!-- / navbar right -->
+</div>
+<!-- / navbar collapse -->
+{% endverbatim %}
