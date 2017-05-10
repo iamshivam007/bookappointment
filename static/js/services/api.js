@@ -49,3 +49,24 @@ app.service('UsersService',
     return UsersAPI
   }
 );
+
+/* Store Admin Service */
+app.factory('StoreAdminService',
+  function (StoreAdminAPI) {
+    return StoreAdminAPI
+  }
+);
+
+/* Shopper Service */
+app.factory('ShopperService',
+  function (ShopperAPI) {
+    return ShopperAPI
+  }
+);
+
+// Personal Assistant Service
+app.factory('PersonalAssistantService',
+  function (PersonalAssistantAPI) {
+    return PersonalAssistantAPI
+  }
+);

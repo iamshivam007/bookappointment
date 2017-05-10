@@ -3,17 +3,21 @@
 app.controller('HeaderController',
   function ($scope, UserDetailsService) {
     $scope.user = {
-      fullName: UserDetailsService.getFirstName() + " " + UserDetailsService.getLastName()
-    }
+      fullName: UserDetailsService.getName()
+    };
+    $scope.$on('getUserDetail', function () {
+      $scope.user.userRole = UserDetailsService.getRole();
+      $scope.user.fullName = UserDetailsService.getName();
+    });
   }
 );
 
 /* Login Controller */
 app.controller('LoginController',
   function(
-    $scope, $state, LoginService, UsersService,
-    ResponseHandlerService) {
-    $scope.user = {};
+    $scope, $state, LoginService, UsersService, PersonalAssistantService, ToasterService,
+    ResponseHandlerService, StoreAdminService, ShopperService, UserDetailsService, $rootScope) {
+    $scope.roles = ['Store Admin', 'Shopper', 'Personal Assistant'];
     $scope.loading = false;
     $scope.loginButtonDisabled = false;
     $scope.login = function () {
@@ -24,6 +28,7 @@ app.controller('LoginController',
         function (response) {
           $scope.loading = false;
           $scope.loginButtonDisabled = false;
+          getUserDetail();
         },
         function(error) {
           $scope.loading = false;
@@ -32,6 +37,24 @@ app.controller('LoginController',
         }
       )
     };
+
+    function getUserDetail() {
+      UsersService.one().get({email:$scope.user.email}).then(
+        function (success) {
+          if (success[0].roles.indexOf($scope.user.role) == -1){
+            ToasterService.errorHandler("Error", "Wrong Login Credentials. you are not a "+$scope.user.role);
+          }
+          else {
+            UserDetailsService.setDetails(success[0]);
+            UserDetailsService.setName(success[0].first_name);
+            UserDetailsService.setRole($scope.user.role);
+            UserDetailsService.setContact(success[0].phone_number);
+            UserDetailsService.setEmail(success[0].email);
+            $state.go('app.home');
+          }
+        }
+      )
+    }
   }
 );
 
@@ -76,14 +99,14 @@ app.controller('LogoutController',
         function() {
           UserDetailsService.clear();
           delete $localStorage.settings;
-          $state.go('access.home');
+          $state.go('app.home');
         }
       );
     }
     // If not then redirect the user
     // directly to Login Page
     else {
-      $state.go('access.home');
+      $state.go('app.home');
     }
   }
 );

@@ -16,6 +16,11 @@
           <div class="form-group">
             <input type="password" placeholder="Password" name="password" class="form-control" data-ng-model="user.password" data-ng-minlength="4" data-ng-maxlength="10" required>
           </div>
+          <div class="form-group">
+            <select class="form-control" ng-model="user.role" ng-options="role for role in roles" required>
+              <option value="">Select Role</option>
+            </select>
+          </div>
           <button id="loginButton" class="btn btn-lg btn-success btn-block" data-ng-disabled='loginForm.$invalid || loginButtonDisabled' data-ng-click="login()" button-spinner="loading">
             <span ng-if="!loading">Login</span>
           </button>
