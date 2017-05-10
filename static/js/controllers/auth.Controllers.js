@@ -1,10 +1,3 @@
-/**
- * Auth Controllers
- * Created by Vaibhav Jain on 22/10/16.
- * Website: https://www.kaizentechlabs.in
- * kaizentech cloud solutions private limited. All Rights Reserved.
- */
-
 'use strict';
 
 app.controller('HeaderController',
@@ -19,7 +12,7 @@ app.controller('HeaderController',
 app.controller('LoginController',
   function(
     $scope, $state, LoginService, UsersService,
-    ResponseHandlerService, UserDetailsService) {
+    ResponseHandlerService) {
     $scope.user = {};
     $scope.loading = false;
     $scope.loginButtonDisabled = false;
@@ -31,7 +24,6 @@ app.controller('LoginController',
         function (response) {
           $scope.loading = false;
           $scope.loginButtonDisabled = false;
-          $scope.userDetail();
         },
         function(error) {
           $scope.loading = false;
@@ -40,13 +32,34 @@ app.controller('LoginController',
         }
       )
     };
-    $scope.userDetail = function(){
-      UsersService.one().get().then(
+  }
+);
+
+/* Sign Up Controller */
+app.controller('SignUpController',
+  function(
+    $scope, $state, SignupService, UsersService,
+    ResponseHandlerService, ToasterService) {
+    $scope.loading = false;
+    $scope.signupButtonDisabled = false;
+    $scope.signup = function () {
+      // $scope.user.phone_number = $scope.user.phone_number;
+      $scope.loading = true;
+      $scope.signupButtonDisabled = true;
+      SignupService.one().customPOST($scope.user).then(
         function (response) {
-          console.log(response);
+          $scope.loading = false;
+          $scope.signupButtonDisabled = false;
+          ToasterService.successHandler("Register", "Successfully");
+          $state.go('access.login');
+        },
+        function(error) {
+          $scope.loading = false;
+          $scope.signupButtonDisabled = false;
+          ResponseHandlerService.errorHandler(error);
         }
       )
-    }
+    };
   }
 );
 

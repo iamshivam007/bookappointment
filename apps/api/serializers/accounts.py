@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from apps.core.models import StoreAdmin, Shopper, PersonalAssistant
+from apps.core.models import Shopper, PersonalAssistant
+from utils.message import USER_ALREADY_EXIST_ERROR_MSG
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -22,6 +23,11 @@ class UserSerializer(serializers.ModelSerializer):
             'is_active'
         )
 
+    def validate_email(self, email):
+        if User.objects.filter(email=email):
+            raise serializers.ValidationError(USER_ALREADY_EXIST_ERROR_MSG)
+        return email
+
     def validate(self, attrs):
         if attrs.get('password1') != attrs.get('password2'):
             return serializers.ValidationError('password must be same')
@@ -30,12 +36,10 @@ class UserSerializer(serializers.ModelSerializer):
     def save(self, request):
         phone_number = request.data.get('phone_number')
         role = request.data.get('role')
-        validated_data = dict(username=request.data['username'], email=request.data['username'])
+        validated_data = dict(username=request.data['username'], email=request.data['email'])
         validated_data['password'] = request.data['password1']
-        validated_data['first_name'] = request.data['first_name']
-        validated_data['last_name'] = request.data['last_name']
+        validated_data['first_name'] = request.data.get('first_name')
         user = User.objects.create_user(**validated_data)
-        StoreAdmin.objects.get_or_create(user=user, phone_number=phone_number)
         Shopper.objects.get_or_create(user=user, phone_number=phone_number)
         PersonalAssistant.objects.get_or_create(user=user, phone_number=phone_number)
         return user
