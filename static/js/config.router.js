@@ -97,6 +97,21 @@ app.run(
             }
           }
         )
+		.state('access.signup', {
+            url: '/signup/',
+            templateUrl: '/tpl/auth_tpl/signup.html',
+            data: {skipRequired: true, loginRequired:false},
+            resolve: {
+              deps: ['uiLoad',
+                function( uiLoad ){
+                  return uiLoad.load([
+                    // '/static/js/controllers/auth.Controllers.js'
+                  ]);
+                }
+              ]
+            }
+          }
+        )
         .state('access.logout', {
             url: '/logout/',
             template: null,
