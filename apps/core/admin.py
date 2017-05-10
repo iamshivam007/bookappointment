@@ -21,3 +21,13 @@ class AppointmentAdmin(admin.ModelAdmin):
 @admin.register(AppointmentShip)
 class AppointmentShip(admin.ModelAdmin):
     list_display = [f.name for f in AppointmentShip._meta.fields]
+
+
+@admin.register(StoreAdmin)
+class StoreAdminAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in StoreAdmin._meta.fields]
+
+
+@admin.register(PersonalAssistant)
+class PersonalAssistantAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in PersonalAssistant._meta.fields]
