@@ -61,3 +61,24 @@ app.factory('UsersAPI',
     return Restangular.service('users')
   }
 );
+
+/* Store Admin API */
+app.factory('StoreAdminAPI',
+  function (Restangular) {
+    return Restangular.service('storesadmin')
+  }
+);
+
+/* Shopper API */
+app.factory('ShopperAPI',
+  function (Restangular) {
+    return Restangular.service('shoppers')
+  }
+);
+
+// Personal Assistant API
+app.factory('PersonalAssistantAPI',
+  function (Restangular) {
+    return Restangular.service('personalassistents')
+  }
+);

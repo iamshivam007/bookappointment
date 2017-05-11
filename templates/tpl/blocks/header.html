@@ -13,12 +13,11 @@
 </div>
 <!-- / navbar header -->
 <!-- navbar collapse -->
-<div class="collapse pos-rlt navbar-collapse box-shadow {{app.settings.navbarCollapseColor}}">
+<div class="collapse pos-rlt navbar-collapse box-shadow {{app.settings.navbarCollapseColor}}" ng-controller="HeaderController">
   <!-- link and dropdown -->
   <!-- nabar right -->
-  <ul ng-if="user.fullName" class="nav navbar-nav navbar-right" ng-controller="HeaderController">
+  <ul ng-if="user.fullName" class="nav navbar-nav navbar-right">
     <li class="dropdown" dropdown>
-      <!--<div ng-if="user.fullName">-->
         <a href class="dropdown-toggle clear" dropdown-toggle>
           <span class="hidden-sm hidden-md">{{ user.fullName }}</span> <b class="caret"></b>
         </a>
@@ -28,11 +27,10 @@
             <a ui-sref="access.logout">Logout</a>
           </li>
         </ul>
-      <!--</div>-->
       <!-- / dropdown -->
     </li>
   </ul>
-  <ul ng-if="!user.fullName" class="nav navbar-nav navbar-right" ng-controller="HeaderController">
+  <ul ng-if="!user.fullName" class="nav navbar-nav navbar-right">
     <li>
       <a ui-sref="access.login">
         <span class="hidden-sm hidden-md"><b>Login</b></span>

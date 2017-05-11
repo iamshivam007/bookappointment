@@ -1,26 +1,23 @@
-/**
- * Auth Controllers
- * Created by Vaibhav Jain on 22/10/16.
- * Website: https://www.kaizentechlabs.in
- * kaizentech cloud solutions private limited. All Rights Reserved.
- */
-
 'use strict';
 
 app.controller('HeaderController',
   function ($scope, UserDetailsService) {
     $scope.user = {
-      fullName: UserDetailsService.getFirstName() + " " + UserDetailsService.getLastName()
-    }
+      fullName: UserDetailsService.getName()
+    };
+    $scope.$on('getUserDetail', function () {
+      $scope.user.userRole = UserDetailsService.getRole();
+      $scope.user.fullName = UserDetailsService.getName();
+    });
   }
 );
 
 /* Login Controller */
 app.controller('LoginController',
   function(
-    $scope, $state, LoginService, UsersService,
-    ResponseHandlerService, UserDetailsService) {
-    $scope.user = {};
+    $scope, $state, LoginService, UsersService, PersonalAssistantService, ToasterService,
+    ResponseHandlerService, StoreAdminService, ShopperService, UserDetailsService, $rootScope) {
+    $scope.roles = ['Store Admin', 'Shopper', 'Personal Assistant'];
     $scope.loading = false;
     $scope.loginButtonDisabled = false;
     $scope.login = function () {
@@ -31,7 +28,7 @@ app.controller('LoginController',
         function (response) {
           $scope.loading = false;
           $scope.loginButtonDisabled = false;
-          $scope.userDetail();
+          getUserDetail();
         },
         function(error) {
           $scope.loading = false;
@@ -40,13 +37,52 @@ app.controller('LoginController',
         }
       )
     };
-    $scope.userDetail = function(){
-      UsersService.one().get().then(
-        function (response) {
-          console.log(response);
+
+    function getUserDetail() {
+      UsersService.one().get({email:$scope.user.email}).then(
+        function (success) {
+          if (success[0].roles.indexOf($scope.user.role) == -1){
+            ToasterService.errorHandler("Error", "Wrong Login Credentials. you are not a "+$scope.user.role);
+          }
+          else {
+            UserDetailsService.setDetails(success[0]);
+            UserDetailsService.setName(success[0].first_name);
+            UserDetailsService.setRole($scope.user.role);
+            UserDetailsService.setContact(success[0].phone_number);
+            UserDetailsService.setEmail(success[0].email);
+            $state.go('app.home');
+          }
         }
       )
     }
+  }
+);
+
+/* Sign Up Controller */
+app.controller('SignUpController',
+  function(
+    $scope, $state, SignupService, UsersService,
+    ResponseHandlerService, ToasterService) {
+    $scope.loading = false;
+    $scope.signupButtonDisabled = false;
+    $scope.signup = function () {
+      // $scope.user.phone_number = $scope.user.phone_number;
+      $scope.loading = true;
+      $scope.signupButtonDisabled = true;
+      SignupService.one().customPOST($scope.user).then(
+        function (response) {
+          $scope.loading = false;
+          $scope.signupButtonDisabled = false;
+          ToasterService.successHandler("Register", "Successfully");
+          $state.go('access.login');
+        },
+        function(error) {
+          $scope.loading = false;
+          $scope.signupButtonDisabled = false;
+          ResponseHandlerService.errorHandler(error);
+        }
+      )
+    };
   }
 );
 
@@ -63,14 +99,14 @@ app.controller('LogoutController',
         function() {
           UserDetailsService.clear();
           delete $localStorage.settings;
-          $state.go('access.home');
+          $state.go('app.home');
         }
       );
     }
     // If not then redirect the user
     // directly to Login Page
     else {
-      $state.go('access.home');
+      $state.go('app.home');
     }
   }
 );
