@@ -15,6 +15,10 @@ app.run(
       function (event, toState) {
         var loginRequired = false;
         var skipRequired = false;
+        if (toState.data.redirectOn && $auth.isAuthenticated()){
+          event.preventDefault();
+          $state.go(toState.data.redirectOn);
+        }
         // check if this state need login
         if (toState.data && toState.data.loginRequired) {
           loginRequired = true;
@@ -46,7 +50,7 @@ app.run(
         .state('home', {
             url: '',
             templateUrl: '/tpl/home.html',
-            data: {loginRequired: false}
+            data: {loginRequired: false, redirectOn : "app.list-stores"}
           }
         )
         .state('app', {

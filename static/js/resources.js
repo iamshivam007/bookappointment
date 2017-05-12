@@ -82,3 +82,10 @@ app.factory('PersonalAssistantAPI',
     return Restangular.service('personalassistents')
   }
 );
+
+// Store API
+app.factory('StoreAPI',
+  function (Restangular) {
+    return Restangular.service('stores')
+  }
+);

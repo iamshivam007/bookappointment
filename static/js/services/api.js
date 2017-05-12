@@ -70,3 +70,10 @@ app.factory('PersonalAssistantService',
     return PersonalAssistantAPI
   }
 );
+
+// Store service
+app.factory('StoresService',
+  function (StoreAPI) {
+    return StoreAPI
+  }
+);

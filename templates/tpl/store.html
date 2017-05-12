@@ -2,8 +2,8 @@
   <div class="bg-light lter b-b wrapper-md">
   <h1 class="m-n font-thin h3">Stores</h1>
 </div>
-  <div class="wrapper-md" data-ng-controller="" data-ng-init="itemsByPage=10">
+  <div class="wrapper-md" data-ng-controller="ListStoreController" data-ng-init="itemsByPage=10">
     <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
-
+    {{ stores }}
   </div>
 {% endverbatim %}

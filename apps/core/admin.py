@@ -31,3 +31,8 @@ class StoreAdminAdmin(admin.ModelAdmin):
 @admin.register(PersonalAssistant)
 class PersonalAssistantAdmin(admin.ModelAdmin):
     list_display = [f.name for f in PersonalAssistant._meta.fields]
+
+
+@admin.register(Store)
+class StoreAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in Store._meta.fields]
