@@ -43,22 +43,22 @@ app.run(
   .config(
     function ($stateProvider, $urlRouterProvider) {
       $stateProvider
-        .state('app', {
-            abstract: true,
-            url: '',
-            templateUrl: '/tpl/app.html',
-            data: {loginRequired: false}
-          }
-        )
-        .state('app.home', {
+        .state('home', {
             url: '',
             templateUrl: '/tpl/home.html',
             data: {loginRequired: false}
           }
         )
-        .state('app.customerDashboard', {
-            url: '/class/:id/',
-            templateUrl: '/tpl/class_profile.html'
+        .state('app', {
+            abstract: true,
+            url: '/app/',
+            templateUrl: '/tpl/app.html',
+            data: {loginRequired: false}
+          }
+        )
+        .state('app.list-stores', {
+            url: 'store/',
+            templateUrl: '/tpl/store.html'
           }
         )
         .state('app.PADashboard', {

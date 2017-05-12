@@ -5,7 +5,7 @@
 
 angular.module('app')
   .controller('AppCtrl',
-    function($scope, $translate, $localStorage, $window) {
+    function($scope, $translate, $localStorage, $window, UserDetailsService) {
       // add 'ie' classes to html
       var isIE = !!navigator.userAgent.match(/MSIE/i);
       isIE && angular.element($window.document.body).addClass('ie');
@@ -75,4 +75,14 @@ angular.module('app')
       }
       // Custom
       $scope.date = new Date();
+      if (!$scope.userID){
+        $scope.userRole = UserDetailsService.getRole();
+        $scope.userID = UserDetailsService.getUID();
+      }
+      // Dynamic template loading based on User role.
+      // $scope.userRole = UserDetailsService.getRole();
+      $scope.$on('getUserRole', function () {
+        $scope.userRole = UserDetailsService.getRole();
+        $scope.userID = UserDetailsService.getUID();
+      });
     });

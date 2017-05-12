@@ -1,0 +1,27 @@
+{% verbatim %}
+<div class="aside-wrap">
+  <!-- if you want to use a custom scroll when aside fixed, use the slimScroll
+    <div class="navi-wrap" ui-jq="slimScroll" ui-options="{height:'100%', size:'8px'}">
+  -->
+  <div class="navi-wrap">
+    <!-- user -->
+    <div class="clearfix hidden-xs text-center" id="aside-user">
+      <div class="dropdown wrapper" dropdown>
+        <a ui-sref="app.dashboard">
+          <span class="thumb-lg w-auto-folded avatar m-t-sm">
+            <img data-ng-src="{{logo}}" class="img-full" alt="...">
+          </span>
+        </a>
+      </div>
+      <div class="line dk hidden-folded"></div>
+    </div>
+    <!-- / user -->
+    <!-- nav -->
+    <nav ui-nav class="navi clearfix" data-ng-if="userRole == 'Store Admin'" ng-include="'/tpl/blocks/nav/admin.html'"></nav>
+    <nav ui-nav class="navi clearfix" data-ng-if="userRole == 'Shopper'" ng-include="'/tpl/blocks/nav/shopper.html'"></nav>
+    <nav ui-nav class="navi clearfix" data-ng-if="userRole == 'pa'" ng-include="'/tpl/blocks/nav/pa.html'"></nav>
+    <!-- nav -->
+  </div>
+</div>
+{% endverbatim %}
+

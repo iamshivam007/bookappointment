@@ -28,7 +28,7 @@ app.controller('LoginController',
         function (response) {
           $scope.loading = false;
           $scope.loginButtonDisabled = false;
-          getUserDetail();
+          setUserDetail();
         },
         function(error) {
           $scope.loading = false;
@@ -38,7 +38,7 @@ app.controller('LoginController',
       )
     };
 
-    function getUserDetail() {
+    function setUserDetail() {
       UsersService.one().get({email:$scope.user.email}).then(
         function (success) {
           if (success[0].roles.indexOf($scope.user.role) == -1){
@@ -50,7 +50,9 @@ app.controller('LoginController',
             UserDetailsService.setRole($scope.user.role);
             UserDetailsService.setContact(success[0].phone_number);
             UserDetailsService.setEmail(success[0].email);
-            $state.go('app.home');
+            UserDetailsService.setUID(success[0].id);
+            $rootScope.$broadcast('getUserRole');
+            $state.go('app.list-stores');
           }
         }
       )
@@ -99,14 +101,14 @@ app.controller('LogoutController',
         function() {
           UserDetailsService.clear();
           delete $localStorage.settings;
-          $state.go('app.home');
+          $state.go('home');
         }
       );
     }
     // If not then redirect the user
     // directly to Login Page
     else {
-      $state.go('app.home');
+      $state.go('home');
     }
   }
 );
