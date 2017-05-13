@@ -1,0 +1,29 @@
+<div data-ng-controller="">
+<div class="col-sm-4 col-lg-4" >
+        <form id="bookForm" name="bookForm" >
+          <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+          <div class="form-group">
+            <select class="form-control"  placeholder="service" name="service" ng-model="user.service"  required>
+                   <option value="service1">service1</option>
+                   <option value="service2">Service2</option>
+                   <option value="service3">service3</option>
+                   <option value="service4">service4</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <input type="date" name="date" class="form-control" data-ng-model="user.date" required>
+          </div>
+          <div class="form-group">
+            <input type="time" placeholder="START TIME" name="start_time" class="form-control" data-ng-model="user.start_time" required>
+          </div>
+		  <div class="form-group">
+            <input type="time" placeholder="END TIME" name="end_time" class="form-control" data-ng-model="user.end_time" required>
+          </div>
+          <button id="confirmButton" class="btn btn-lg btn-success btn-block"  button-spinner="loading">
+            <span ng-if="!loading">CONFIRM</span>
+          </button>
+         
+        </form>
+      </div>
+    </div>
+ 
