@@ -1,86 +1,29 @@
 {% verbatim %}
   <div class="bg-light lter b-b wrapper-md">
-  <h1 class="m-n font-thin h3">Stores</h1>
-</div>
+    <h1 class="m-n font-thin h3">Stores</h1>
+  </div>
   <div class="wrapper-md" data-ng-controller="ListStoreController" data-ng-init="itemsByPage=10">
     <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
-    <!---{{ stores }}-->
-	<div class="row">
+    <div class="row">
 
-                    <div class="col-sm-4 col-lg-4 col-md-4">
-                        <div class="thumbnail">
-                            <img src="http://placehold.it/320x150" alt="">
-                            <div class="caption">
-                                <h4 class="pull-right">{{stores[0].opening_time}}-{{stores[0].closing_time}}</h4>
-                                <h4>{{stores[0].name}}
-                                </h4>
-                                <p>{{stores[0].address}}</p>
-                            </div>
-                            <div class="book">
-                                <button type="button" id="Bt1" class="bookbtn" >Book Now</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4 col-lg-4 col-md-4">
-                        <div class="thumbnail">
-                            <img src="http://placehold.it/320x150" alt="">
-                            <div class="caption">
-                                <h4 class="pull-right">time</h4>
-                                <h4>Second store
-                                </h4>
-                                <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                            </div>
-                            <div class="book">
-                                <button type="button" id="Bt1" class="bookbtn" >Book Now</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4 col-lg-4 col-md-4">
-                        <div class="thumbnail">
-                            <img src="http://placehold.it/320x150" alt="">
-                            <div class="caption">
-                                <h4 class="pull-right">time</h4>
-                                <h4>Third store
-                                </h4>
-                                <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                            </div>
-                            <div class="book">
-                                <button type="button" id="Bt1" class="bookbtn" >Book Now</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4 col-lg-4 col-md-4">
-                        <div class="thumbnail">
-                            <img src="http://placehold.it/320x150" alt="">
-                            <div class="caption">
-                                <h4 class="pull-right">time</h4>
-                                <h4>Fourth store
-                                </h4>
-                                <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                            </div>
-                            <div class="book">
-                                <button type="button" id="Bt1" class="bookbtn" >Book Now</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4 col-lg-4 col-md-4">
-                        <div class="thumbnail">
-                            <img src="http://placehold.it/320x150" alt="">
-                            <div class="caption">
-                                <h4 class="pull-right">time</h4>
-                                <h4>Fifth store
-                                </h4>
-                                <p>This is a short description. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                            </div>
-                            <div class="book">
-                                <button type="button" id="Bt1" class="bookbtn" >Book Now</button>
-                            </div>
-                        </div>
-                    </div>
-					</div>
+      <div class="col-sm-4 col-lg-4 col-md-4" ng-repeat="store in stores">
+        <div class="thumbnail">
+          <img src="http://placehold.it/320x150" alt="">
+          <div class="caption">
+            <h4 class="pull-right">{{store.opening_time|timeFilter}} - {{store.closing_time|timeFilter}}</h4>
+            <h4>{{store.name}}
+            </h4>
+            <p>{{store.address}}</p>
+          </div>
+          <div class="book">
+            <button type="button" id="Bt1" class="bookbtn" ng-click="bookAppointment(store.id)">Book Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <script type="text/ng-template" id="book_appointment">
+    <div data-ng-include=" '/tpl/blocks/bookform.html' "></div>
+  </script>
 {% endverbatim %}
