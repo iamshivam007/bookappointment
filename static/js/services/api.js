@@ -77,3 +77,73 @@ app.factory('StoresService',
     return StoreAPI
   }
 );
+
+// Appointments service
+app.factory('AppointmentsService',
+  function (AppointmentsAPI) {
+    return AppointmentsAPI
+  }
+);
+
+// AppointmentShip service
+app.factory('AppointmentShipService',
+  function (AppointmentShipAPI) {
+    return AppointmentShipAPI
+  }
+);
+
+// Registry service
+app.factory('RegistryService',
+  function (RegistryAPI) {
+    return RegistryAPI
+  }
+);
+
+// StoreSubscriptions service
+app.factory('StoreSubscriptionsService',
+  function (StoreSubscriptionsAPI) {
+    return StoreSubscriptionsAPI
+  }
+);
+
+// RoleSubscriptions service
+app.factory('RoleSubscriptionsService',
+  function (RoleSubscriptionsAPI) {
+    return RoleSubscriptionsAPI
+  }
+);
+
+// ServiceSubscriptions service
+app.factory('ServiceSubscriptionsService',
+  function (ServiceSubscriptionsAPI) {
+    return ServiceSubscriptionsAPI
+  }
+);
+
+// SkillRoleRelation service
+app.factory('SkillRoleRelationService',
+  function (SkillRoleRelationAPI) {
+    return SkillRoleRelationAPI
+  }
+);
+
+// Skills service
+app.factory('SkillsService',
+  function (SkillsAPI) {
+    return SkillsAPI
+  }
+);
+
+// Roles service
+app.factory('RolesService',
+  function (RolesAPI) {
+    return RolesAPI
+  }
+);
+
+// Services service
+app.factory('ServicesService',
+  function (ServicesAPI) {
+    return ServicesAPI
+  }
+);

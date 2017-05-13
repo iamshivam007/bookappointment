@@ -89,3 +89,73 @@ app.factory('StoreAPI',
     return Restangular.service('stores')
   }
 );
+
+// Appointment API
+app.factory('AppointmentsAPI',
+  function (Restangular) {
+    return Restangular.service('appointments')
+  }
+);
+
+// AppointmentShip API
+app.factory('AppointmentShipAPI',
+  function (Restangular) {
+    return Restangular.service('appointmentships')
+  }
+);
+
+// Registry API
+app.factory('RegistryAPI',
+  function (Restangular) {
+    return Restangular.service('registries')
+  }
+);
+
+// StoreSubscriptions API
+app.factory('StoreSubscriptionsAPI',
+  function (Restangular) {
+    return Restangular.service('storesubscriptions')
+  }
+);
+
+// RoleSubscriptions API
+app.factory('RoleSubscriptionsAPI',
+  function (Restangular) {
+    return Restangular.service('rolesubscriptions')
+  }
+);
+
+// ServiceSubscription API
+app.factory('ServiceSubscriptionsAPI',
+  function (Restangular) {
+    return Restangular.service('servicesubscriptions')
+  }
+);
+
+// SkillRoleRelation API
+app.factory('SkillRoleRelationAPI',
+  function (Restangular) {
+    return Restangular.service('skillrolerelation')
+  }
+);
+
+// Skill API
+app.factory('SkillsAPI',
+  function (Restangular) {
+    return Restangular.service('skills')
+  }
+);
+
+// Role API
+app.factory('RolesAPI',
+  function (Restangular) {
+    return Restangular.service('roles')
+  }
+);
+
+// Services API
+app.factory('ServicesAPI',
+  function (Restangular) {
+    return Restangular.service('services')
+  }
+);
