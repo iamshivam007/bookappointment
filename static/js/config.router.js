@@ -65,6 +65,11 @@ app.run(
             templateUrl: '/tpl/store.html'
           }
         )
+        .state('app.list-appointments', {
+            url: 'store/',
+            templateUrl: '/tpl/list-appointment.html'
+          }
+        )
         .state('app.PADashboard', {
             url: '/class/:id/',
             templateUrl: '/tpl/class_profile.html'
