@@ -25,24 +25,141 @@ app.controller('ListStoreController',
         function () {
         }
       );
+    };
+
+    $scope.addStore = function () {
+      var addStoreModalInstance = $modal.open({
+          templateUrl: "add_store",
+          controller: "StoreController",
+          size: undefined,
+          resolve: {
+            id: function () {
+              return ""
+            }
+          }
+        }
+      );
+      addStoreModalInstance.result.then(
+        function (store) {
+          $scope.stores.push(angular.copy(store));
+          ToasterService.successHandler("Store", "Added Successfully")
+        }
+      )
+    };
+
+    $scope.editStore = function (id, index) {
+      var editStoreModalInstance = $modal.open({
+          templateUrl: "add_store",
+          controller: "StoreController",
+          size: undefined,
+          resolve: {
+            id: function () {
+              return id
+            }
+          }
+        }
+      );
+      editStoreModalInstance.result.then(
+        function (store) {
+          $scope.stores[index] = angular.copy(store);
+          ToasterService.successHandler("Store", "Edited Successfully")
+        }
+      )
+    };
+
+    $scope.deleteStore = function (id, index) {
+      var deleteStoreModalInstance = $modal.open({
+          templateUrl: "delete_store",
+          controller: "StoreController",
+          size: undefined,
+          resolve: {
+            id: function () {
+              return id
+            }
+          }
+        }
+      );
+      deleteStoreModalInstance.result.then(
+        function () {
+          $scope.stores.splice(index, 1);
+          ToasterService.successHandler("Store", "Deleted Successfully")
+        }
+      )
     }
   }
 );
 
-$scope.addMore = function() {
-    $scope.inputs += 1;
-};
+app.controller("StoreController",
+  function ($scope, StoresService, ServicesService, ChoicesService, $modalInstance,
+  $filter, ResponseHandlerService, id) {
+    $scope.services = [];
+    $scope.days = [];
+    $scope.store = {};
+    ServicesService.one().get().then(
+      function (success) {
+        $scope.services = success;
+      }
+    );
+    ChoicesService.one('days_choices').get().then(
+      function (success) {
+        $scope.days = success.choices;
+      }
+    );
 
-$scope.range = function(count) {
-
-    var inputs = [];
-    for (var i = 0; i < count; i++) { 
-        inputs.push(i)
+    if (id){
+      StoresService.one(id).get().then(
+        function (success) {
+          $scope.store = success;
+          var parts = $scope.store.opening_time.split(':');
+          $scope.store.opening_time = new Date(0, 0, 0, parts[0], parts[1], parts[2]);
+          parts = $scope.store.closing_time.split(':');
+          $scope.store.closing_time = new Date(0, 0, 0, parts[0], parts[1], parts[2]);
+        }
+      )
     }
-    return inputs;
-}
 
-$scope.inputs = 0;
+    $scope.save = function () {
+      var store = angular.copy($scope.store);
+      store.opening_time = $filter('date')($scope.store.opening_time, "H:mm");
+      store.closing_time = $filter('date')($scope.store.closing_time, "H:mm");
+      StoresService.one().customPOST(store).then(
+        function (success) {
+          $modalInstance.close(success)
+        },
+        function (error) {
+          ResponseHandlerService.errorHandler(error);
+        }
+      )
+    };
+
+    $scope.update = function () {
+      var store = angular.copy($scope.store);
+      store.opening_time = $filter('date')($scope.store.opening_time, "H:mm");
+      store.closing_time = $filter('date')($scope.store.closing_time, "H:mm");
+      StoresService.one(id).patch(store).then(
+        function (success) {
+          $modalInstance.close(success)
+        },
+        function (error) {
+          ResponseHandlerService.errorHandler(error);
+        }
+      )
+    };
+
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+
+    $scope.delete = function () {
+      StoresService.one(id).remove().then(
+        function (success) {
+          $modalInstance.close(success);
+        }
+      )
+    }
+  }
+);
+
 
 app.controller('BookAppointmentController',
   function ($scope, $modalInstance, id, StoresService, UserDetailsService, AppointmentsService,
