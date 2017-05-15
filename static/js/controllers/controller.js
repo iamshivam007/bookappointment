@@ -29,6 +29,21 @@ app.controller('ListStoreController',
   }
 );
 
+$scope.addMore = function() {
+    $scope.inputs += 1;
+};
+
+$scope.range = function(count) {
+
+    var inputs = [];
+    for (var i = 0; i < count; i++) { 
+        inputs.push(i)
+    }
+    return inputs;
+}
+
+$scope.inputs = 0;
+
 app.controller('BookAppointmentController',
   function ($scope, $modalInstance, id, StoresService, UserDetailsService, AppointmentsService,
   ShopperService, ServicesService, $filter) {

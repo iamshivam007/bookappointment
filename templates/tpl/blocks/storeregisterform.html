@@ -1,0 +1,33 @@
+{% verbatim %}
+<div class="modal-header">
+  <h3 class="modal-title">ADD STORE</h3>
+</div>
+<div class="modal-body">
+  
+  <form id="storeForm" name="storeForm">
+    
+	<div class="form-group">
+      <input type="text" name="name" class="form-control" data-ng-model=" " required>
+    </div>
+    <div class="form-group">
+      <input type="text" name="address" class="form-control" data-ng-model=" " required>
+    </div>
+	<div class="form-group">
+      <input ng-repeat="n in range(inputs)">
+      <button ng-click="addMore()">Add more!</button>
+    </div>
+    <div class="form-group">
+      <input type="number" placeholder="BUFFER TIME" class="form-control" data-ng-model=" " required>
+    </div>
+    <div class="form-group">
+      <input type="time" placeholder="OPENING TIME" class="form-control" data-ng-model=" " required>
+    </div>
+	<div class="form-group">
+      <input type="time" placeholder="END TIME" class="form-control" data-ng-model=" " required>
+    </div>
+    <button id="confirmButton" class="btn btn-lg btn-success btn-block" ng-click="save()" button-spinner="loading">
+      <span ng-if="!loading">CONFIRM</span>
+    </button>
+  </form>
+</div>
+{% endverbatim %}
