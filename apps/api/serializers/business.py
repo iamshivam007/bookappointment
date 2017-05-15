@@ -1,11 +1,13 @@
-from rest_framework import serializers
+from rest_framework import serializers, fields
 
 from apps.core.models.business import *
 from utils.utils import values_from_queryset
+from utils.choices import WEEK_DAYS_CHOICES
 
 
 class StoreSerializer(serializers.ModelSerializer):
     service_detail = serializers.SerializerMethodField()
+    working_days = fields.MultipleChoiceField(choices=WEEK_DAYS_CHOICES)
 
     class Meta:
         model = Store
