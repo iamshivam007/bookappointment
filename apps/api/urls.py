@@ -21,6 +21,7 @@ router.register('appointments', AppointmentViewSet, base_name='appointment')
 router.register('appointmentships', AppointmentShipViewSet, base_name='appointmentship')
 router.register('registries', RegistryViewSet, base_name='registry')
 router.register('users', UserViewSet, base_name='users')
+router.register('choices', ChoicesViewSet, base_name='choices')
 
 
 urlpatterns = [
