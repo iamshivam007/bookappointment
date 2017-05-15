@@ -206,12 +206,56 @@ app.controller('BookAppointmentController',
 
 // List Appointment Controller
 app.controller('ListAppointmentsController',
-  function ($scope, AppointmentsService, $filter) {
+  function ($scope, AppointmentsService, $modal, ToasterService) {
     AppointmentsService.one().get().then(
       function (success) {
         $scope.appointments = success;
-        console.log(success.plain());
       }
-    )
+    );
+
+    $scope.cancelAppointment = function (id, index) {
+      var deleteStoreModalInstance = $modal.open({
+          templateUrl: "cancel_appointment",
+          controller: "CancelAppointmentController",
+          size: undefined,
+          resolve: {
+            id: function () {
+              return id
+            }
+          }
+        }
+      );
+      deleteStoreModalInstance.result.then(
+        function (appointment) {
+          $scope.appointments[index] = angular.copy(appointment);
+          ToasterService.successHandler("Appointment", "Canceled Successfully")
+        }
+      )
+    }
+  }
+);
+
+app.controller("CancelAppointmentController",
+  function ($scope, AppointmentsService, id, $modalInstance) {
+
+    AppointmentsService.one(id).get().then(
+      function (success) {
+        $scope.appointment = success;
+      }
+    );
+
+    $scope.cancelAppointment = function () {
+      var appointment = angular.copy($scope.appointment);
+      appointment.status = "Cancel";
+      AppointmentsService.one(id).patch(appointment).then(
+        function (success) {
+          $modalInstance.close(success);
+        }
+      );
+    };
+
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
   }
 );
