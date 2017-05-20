@@ -36,3 +36,18 @@ class PersonalAssistantAdmin(admin.ModelAdmin):
 @admin.register(Store)
 class StoreAdmin(admin.ModelAdmin):
     list_display = [f.name for f in Store._meta.fields]
+
+
+@admin.register(ServiceSubscription)
+class ServiceSubscriptionAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in ServiceSubscription._meta.fields]
+
+
+@admin.register(RoleSubscription)
+class RoleSubscriptionAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in RoleSubscription._meta.fields]
+
+
+@admin.register(StoreSubscription)
+class StoreSubscriptionAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in StoreSubscription._meta.fields]
