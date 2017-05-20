@@ -4,10 +4,13 @@ from django.contrib.auth.models import User
 from django_extensions.db.models import TimeStampedModel
 from phonenumber_field.modelfields import PhoneNumberField
 from multiselectfield.db.fields import MultiSelectField
+from django.utils.encoding import python_2_unicode_compatible
+
 
 from utils.choices import *
 
 
+@python_2_unicode_compatible
 class PersonalAssistant(TimeStampedModel):
     user = models.OneToOneField(User)
     phone_number = PhoneNumberField()
@@ -20,6 +23,7 @@ class PersonalAssistant(TimeStampedModel):
         return "{0}-{1}".format(self.user, self.phone_number)
 
 
+@python_2_unicode_compatible
 class ServiceSubscription(TimeStampedModel):
     personal_assistant = models.ForeignKey("core.PersonalAssistant")
     service = models.ForeignKey("core.Service")
@@ -34,6 +38,7 @@ class ServiceSubscription(TimeStampedModel):
         return "{0}-{1}-{2}".format(self.personal_assistant, self.service, self.is_approved)
 
 
+@python_2_unicode_compatible
 class RoleSubscription(TimeStampedModel):
     personal_assistant = models.ForeignKey("core.PersonalAssistant")
     role = models.ForeignKey("core.Role")
