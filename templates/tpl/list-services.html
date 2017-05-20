@@ -1,0 +1,104 @@
+{% verbatim %}
+  <div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">Services</h1>
+  </div>
+  <div class="wrapper-md" data-ng-controller="ListServicesController" data-ng-init="itemsByPage=10">
+    <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+    <div class="panel panel-default">
+    <div class="panel-heading text-right">
+      <form class="form-inline" role="form">
+        <button class="btn btn-success" ng-click="addService()">Add Service</button>
+        <select class="form-control" name="items" id="items" data-ng-model="itemsByPage">
+          <option>10</option>
+          <option>25</option>
+          <option>50</option>
+          <option>100</option>
+        </select>
+      </form>
+    </div>
+    <div class="table-responsive">
+      <table st-table="displayedCollection" st-safe-src="classes" class="table table-striped table-bordered table-hover table-condensed b-t b-b">
+        <thead>
+        <tr>
+          <th class="text-center col-sm-1">SNo.</th>
+          <th>Service Name</th>
+          <th>Service Cost</th>
+          <th>Duration</th>
+          <th class="text-center">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="service in services" class="text-capitalize">
+          <td class="text-center" data-ng-bind="$index+1"></td>
+          <td>{{ service.name }}</td>
+          <td><i class="fa fa-inr" aria-hidden="true"></i> {{ service.price }}</td>
+          <td>{{ service.time_duration }} minutes</td>
+          <td style="white-space: nowrap" class="text-center">
+            <div class="buttons">
+              <button class="btn btn-sm btn-primary" ng-click="editService(service.id, $index)">Edit</button>
+              <button class="btn btn-sm btn-danger" ng-click="deleteService(service.id, $index)">Delete</button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Service modal -->
+    <script type="text/ng-template" id="add_edit_service">
+      <div class="modal-header">
+        <h3 class="modal-title" ng-if="!service.id">Add Service</h3>
+        <h3 class="modal-title" ng-if="service.id">Update Service</h3>
+      </div>
+      <div class="modal-body">
+        <form name="ServiceForm" class="form-validation" novalidate>
+          <div class="form-group clearfix">
+            <div class="col-sm-12">
+              <label>Name</label>
+              <input type="text" class="form-control" data-ng-model="service.name" required>
+            </div>
+          </div>
+          <div class="form-group clearfix">
+          <div class="col-sm-6">
+              <label>Price</label>
+              <input type="text" class="form-control" data-ng-model="service.price" required>
+            </div>
+            <div class="col-sm-6">
+              <label>Duration</label>
+              <input type="text" class="form-control" data-ng-model="service.time_duration" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+            <button ng-if="!service.id" type="submit" id="ServiceForm" class="btn btn-success" data-ng-disabled='ServiceForm.$invalid'
+                    data-ng-click="save()" button-spinner="loading"><span ng-if="!loading">Save</span>
+            </button>
+            <button ng-if="service.id" type="submit" id="ServiceForm" class="btn btn-success" data-ng-disabled='ServiceForm.$invalid'
+                    data-ng-click="update()" button-spinner="loading"><span ng-if="!loading">Save</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </script>
+    <!-- Service modal -->
+    <!-- Delete Service modal -->
+    <script type="text/ng-template" id="delete_service">
+      <div class="modal-header">
+        <h3 class="modal-title">Delete service - {{service.name}}?</h3>
+      </div>
+      <div class="modal-body">
+        <form name="deleteServiceForm" class="form-validation" novalidate>
+          <div class="form-group clearfix">
+            Are you sure you want to delete this Service and its related content ?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" ng-click="cancel()">No</button>
+            <button type="submit" id="deleteServiceForm" class="btn btn-danger" data-ng-disabled='deleteServiceForm.$invalid'
+                    data-ng-click="delete()" button-spinner="loading"><span ng-if="!loading">Yes</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </script>
+    <!-- Delete Service modal -->
+{% endverbatim %}

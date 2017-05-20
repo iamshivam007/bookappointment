@@ -108,6 +108,25 @@ app.run(
             }
           }
         )
+        .state('app.list-services', {
+            url: 'services/',
+            templateUrl: '/tpl/list-services.html'
+          }
+        )
+        .state('app.list-service-subscription', {
+            url: 'servicesubscriptions/',
+            templateUrl: '/tpl/list-service-subscriptions.html',
+            resolve: {
+              deps: ['$ocLazyLoad',
+                function( $ocLazyLoad ){
+                  return $ocLazyLoad.load([
+                    'smart-table'
+                  ]);
+                }
+              ]
+            }
+          }
+        )
         .state('app.PADashboard', {
             url: '/class/:id/',
             templateUrl: '/tpl/class_profile.html'

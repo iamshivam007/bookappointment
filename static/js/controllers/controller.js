@@ -561,3 +561,171 @@ app.controller('ListRoleSubscriptionsController',
 
   }
 );
+
+// List Services Controller
+app.controller('ListServicesController',
+  function ($scope, ServicesService, $modal, ToasterService) {
+    ServicesService.one().get().then(
+      function (success) {
+        $scope.services = success;
+      }
+    );
+
+    $scope.addService = function () {
+      var addServiceModalInstance = $modal.open({
+          templateUrl: "add_edit_service",
+          controller: "ServiceController",
+          size: undefined,
+          resolve: {
+            id: function () {
+              return ""
+            }
+          }
+        }
+      );
+      addServiceModalInstance.result.then(
+        function (service) {
+          $scope.services.push(angular.copy(service));
+          ToasterService.successHandler("Service", "Added Successfully")
+        }
+      )
+    };
+
+    $scope.editService = function (id, index) {
+      var addServiceModalInstance = $modal.open({
+          templateUrl: "add_edit_service",
+          controller: "ServiceController",
+          size: undefined,
+          resolve: {
+            id: function () {
+              return id
+            }
+          }
+        }
+      );
+      addServiceModalInstance.result.then(
+        function (service) {
+          $scope.services[index] = angular.copy(service);
+          ToasterService.successHandler("Service", "Updated Successfully")
+        }
+      )
+    };
+
+    $scope.deleteService = function (id, index) {
+      var addServiceModalInstance = $modal.open({
+          templateUrl: "delete_service",
+          controller: "ServiceController",
+          size: undefined,
+          resolve: {
+            id: function () {
+              return id
+            }
+          }
+        }
+      );
+      addServiceModalInstance.result.then(
+        function () {
+          $scope.services.splice(index, 1);
+          ToasterService.successHandler("Service", "Deleted Successfully")
+        }
+      )
+    }
+  }
+);
+
+// Service Controller
+app.controller("ServiceController",
+  function ($scope, ServicesService, $modalInstance,
+  $filter, ResponseHandlerService, id) {
+
+    if (id){
+      ServicesService.one(id).get().then(
+        function (success) {
+          $scope.service = success;
+        }
+      )
+    }
+
+    $scope.save = function () {
+      ServicesService.one().customPOST($scope.service).then(
+        function (success) {
+          $modalInstance.close(success.plain())
+        },
+        function (error) {
+          ResponseHandlerService.errorHandler(error);
+        }
+      )
+    };
+
+    $scope.update = function () {
+      ServicesService.one(id).patch($scope.service).then(
+        function (success) {
+          $modalInstance.close(success.plain())
+        },
+        function (error) {
+          ResponseHandlerService.errorHandler(error);
+        }
+      )
+    };
+
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+
+    $scope.delete = function () {
+      ServicesService.one(id).remove().then(
+        function (success) {
+          $modalInstance.close(success);
+        }
+      )
+    }
+  }
+);
+
+// List Service Subscription Controller
+app.controller('ListServiceSubscriptionsController',
+  function ($scope, ServiceSubscriptionsService, $modal, ToasterService, $filter) {
+
+    $scope.status = "pending";
+
+    $scope.getSkillSubscriptions = function () {
+      ServiceSubscriptionsService.one().get().then(
+        function (success) {
+          $scope.allServiceSubscriptions = success;
+          $scope.changeStatus();
+        }
+      );
+    };
+
+    $scope.getSkillSubscriptions();
+
+    $scope.changeStatus = function () {
+      if($scope.status == 'pending'){
+        $scope.serviceSubscriptions = $filter('filter')($scope.allServiceSubscriptions, {'is_approved':false});
+      }
+      if($scope.status == 'verified'){
+        $scope.serviceSubscriptions = $filter('filter')($scope.allServiceSubscriptions, {'is_approved':true});
+      }
+    };
+
+    $scope.disApprove_service = function (id, index) {
+      $scope.serviceSubscriptions[index].is_approved = false;
+      ServiceSubscriptionsService.one(id).patch($scope.serviceSubscriptions[index]).then(
+        function (success) {
+          ToasterService.successHandler("Service", "DisApproved Successfully.");
+          $scope.getSkillSubscriptions();
+        }
+      );
+    };
+
+    $scope.Approve_service = function (id, index) {
+      $scope.serviceSubscriptions[index].is_approved = true;
+      ServiceSubscriptionsService.one(id).patch($scope.serviceSubscriptions[index]).then(
+        function (success) {
+          ToasterService.successHandler("Service", "Approved Successfully.");
+          $scope.getSkillSubscriptions();
+        }
+      );
+    }
+  }
+);
