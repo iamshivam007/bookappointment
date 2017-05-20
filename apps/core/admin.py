@@ -30,7 +30,7 @@ class StoreAdminAdmin(admin.ModelAdmin):
 
 @admin.register(PersonalAssistant)
 class PersonalAssistantAdmin(admin.ModelAdmin):
-    list_display = [f.name for f in PersonalAssistant._meta.fields]
+    list_display = [f.name for f in PersonalAssistant._meta.fields if f.name != 'available_days']
 
 
 @admin.register(Store)
