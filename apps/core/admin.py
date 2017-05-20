@@ -38,6 +38,11 @@ class StoreAdmin(admin.ModelAdmin):
     list_display = [f.name for f in Store._meta.fields]
 
 
+@admin.register(Service)
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in Service._meta.fields]
+
+
 @admin.register(ServiceSubscription)
 class ServiceSubscriptionAdmin(admin.ModelAdmin):
     list_display = [f.name for f in ServiceSubscription._meta.fields]
