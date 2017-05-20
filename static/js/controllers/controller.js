@@ -259,3 +259,125 @@ app.controller("CancelAppointmentController",
     };
   }
 );
+
+// List Skills Controller
+app.controller('ListSkillsController',
+  function ($scope, SkillsService, $modal, ToasterService) {
+    SkillsService.one().get().then(
+      function (success) {
+        $scope.skills = success;
+      }
+    );
+
+    $scope.addSkill = function () {
+      var addSkillModalInstance = $modal.open({
+          templateUrl: "add_edit_skill",
+          controller: "SkillController",
+          size: undefined,
+          resolve: {
+            id: function () {
+              return ""
+            }
+          }
+        }
+      );
+      addSkillModalInstance.result.then(
+        function (skill) {
+          $scope.skills.push(angular.copy(skill));
+          ToasterService.successHandler("Skill", "Added Successfully")
+        }
+      )
+    };
+
+    $scope.editSkill = function (id, index) {
+      var addSkillModalInstance = $modal.open({
+          templateUrl: "add_edit_skill",
+          controller: "SkillController",
+          size: undefined,
+          resolve: {
+            id: function () {
+              return id
+            }
+          }
+        }
+      );
+      addSkillModalInstance.result.then(
+        function (skill) {
+          $scope.skills[index] = angular.copy(skill);
+          console.log(index, skill);
+          ToasterService.successHandler("Skill", "Updated Successfully")
+        }
+      )
+    };
+
+    $scope.deleteSkill = function (id, index) {
+      var deleteSkillModalInstance = $modal.open({
+          templateUrl: "delete_skill",
+          controller: "SkillController",
+          size: undefined,
+          resolve: {
+            id: function () {
+              return id
+            }
+          }
+        }
+      );
+      deleteSkillModalInstance.result.then(
+        function () {
+          $scope.skills.splice(index, 1);
+          ToasterService.successHandler("Skill", "Deleted Successfully")
+        }
+      )
+    }
+
+  }
+);
+
+// Skill Controller
+app.controller("SkillController",
+  function ($scope, SkillsService, $modalInstance,
+  $filter, ResponseHandlerService, id) {
+
+    if (id){
+      SkillsService.one(id).get().then(
+        function (success) {
+          $scope.skill = success;
+        }
+      )
+    }
+
+    $scope.save = function () {
+      SkillsService.one().customPOST($scope.skill).then(
+        function (success) {
+          $modalInstance.close(success.plain())
+        },
+        function (error) {
+          ResponseHandlerService.errorHandler(error);
+        }
+      )
+    };
+
+    $scope.update = function () {
+      SkillsService.one(id).patch($scope.skill).then(
+        function (success) {
+          $modalInstance.close(success.plain())
+        },
+        function (error) {
+          ResponseHandlerService.errorHandler(error);
+        }
+      )
+    };
+
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+
+    $scope.delete = function () {
+      SkillsService.one(id).remove().then(
+        function (success) {
+          $modalInstance.close(success);
+        }
+      )
+    }
+  }
+);
