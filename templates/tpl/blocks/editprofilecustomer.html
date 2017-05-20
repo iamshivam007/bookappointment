@@ -1,0 +1,32 @@
+{% verbatim %}
+<div class="modal-header">
+  <h3 class="modal-title">EDIT PROFILE</h3>
+</div>
+<div class="modal-body">
+  
+  <form id="ProfileCustomerForm" name="ProfileCustomerForm">
+    
+    <div class="form-group">
+      <input type="text" name="name"  value={{shopper.name}} class="form-control"  data-ng-model=" " required>
+    </div>
+    <div class="form-group">
+      <input type="number"  value={{shopper.phone_number}} name="phone_number" class="form-control" data-ng-model=" " required>
+    </div>
+    <div class="form-group">
+      <input type="email"  value={{shopper.}}="form-control" data-ng-model="" required>
+    </div>
+	<div class="form-group">
+      <input type="text" placeholder="Allergies" name="allergies" class="form-control" maxlength="200" data-ng-model="" >
+    </div>
+	<div class="form-group">
+      <input type="text" placeholder="Preferred Brands" name="brand_preferred" maxlength="200" class="form-control" data-ng-model="" >
+    </div>
+	<div class="form-group">
+      <input type="text" placeholder="Any Instructions" name="instruction"  class="form-control" data-ng-model="" >
+    </div>
+    <button id="confirmButton" class="btn btn-lg btn-success btn-block" ng-click="save()" button-spinner="loading">
+      <span ng-if="!loading">CONFIRM</span>
+    </button>
+  </form>
+</div>
+{% endverbatim %}
