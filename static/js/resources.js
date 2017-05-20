@@ -159,3 +159,10 @@ app.factory('ServicesAPI',
     return Restangular.service('services')
   }
 );
+
+// Choices API
+app.factory('ChoicesAPI',
+  function (Restangular) {
+    return Restangular.service('choices')
+  }
+);

@@ -1,0 +1,94 @@
+{% verbatim %}
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3">Roles</h1>
+</div>
+<div class="wrapper-md" data-ng-controller="ListRolesController"  data-ng-init="itemsByPage=10">
+  <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+  <div class="panel panel-default">
+    <div class="panel-heading text-right">
+      <form class="form-inline" role="form">
+        <button class="btn btn-success" ng-click="addRole()">Add Role</button>
+        <select class="form-control" name="items" id="items" data-ng-model="itemsByPage">
+          <option>10</option>
+          <option>25</option>
+          <option>50</option>
+          <option>100</option>
+        </select>
+      </form>
+    </div>
+    <div class="table-responsive">
+      <table st-table="displayedCollection" st-safe-src="classes" class="table table-striped table-bordered table-hover table-condensed b-t b-b">
+        <thead>
+        <tr>
+          <th colspan="6"></th>
+        </tr>
+        <tr>
+          <th class="text-center col-sm-1">SNo.</th>
+          <th>Role Name</th>
+          <th class="text-center">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="role in roles">
+          <td class="text-center" data-ng-bind="$index+1"></td>
+          <td>{{ role.name }}</td>
+          <td style="white-space: nowrap" class="text-center">
+            <div class="buttons">
+              <button class="btn btn-sm btn-primary" ng-click="editRole(role.id, $index)">Edit</button>
+              <button class="btn btn-sm btn-danger" ng-click="deleteRole(role.id, $index)">Delete</button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Role modal -->
+    <script type="text/ng-template" id="add_edit_role">
+      <div class="modal-header">
+        <h3 class="modal-title" ng-if="!role.id">Add Role</h3>
+        <h3 class="modal-title" ng-if="role.id">Update Role</h3>
+      </div>
+      <div class="modal-body">
+        <form name="RoleForm" class="form-validation" novalidate>
+          <div class="form-group clearfix">
+            <div class="col-sm-12">
+              <label>Name</label>
+              <input type="text" class="form-control" data-ng-model="role.name" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+            <button ng-if="!role.id" type="submit" id="RoleForm" class="btn btn-success" data-ng-disabled='RoleForm.$invalid'
+                    data-ng-click="save()" button-spinner="loading"><span ng-if="!loading">Save</span>
+            </button>
+            <button ng-if="role.id" type="submit" id="RoleForm" class="btn btn-success" data-ng-disabled='RoleForm.$invalid'
+                    data-ng-click="update()" button-spinner="loading"><span ng-if="!loading">Save</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </script>
+    <!-- Role modal -->
+    <!-- Delete Role modal -->
+    <script type="text/ng-template" id="delete_role">
+      <div class="modal-header">
+        <h3 class="modal-title">Delete Role - {{role.name}}?</h3>
+      </div>
+      <div class="modal-body">
+        <form name="deleteRoleForm" class="form-validation" novalidate>
+          <div class="form-group clearfix">
+            Are you sure you want to delete this Role and its related content ?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" ng-click="cancel()">No</button>
+            <button type="submit" id="deleteRoleForm" class="btn btn-danger" data-ng-disabled='deleteRoleForm.$invalid'
+                    data-ng-click="delete()" button-spinner="loading"><span ng-if="!loading">Yes</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </script>
+    <!-- Delete Role modal -->
+</div>
+{% endverbatim %}

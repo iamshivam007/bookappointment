@@ -61,13 +61,37 @@ app.run(
           }
         )
         .state('app.list-stores', {
-            url: 'store/',
-            templateUrl: '/tpl/store.html'
+            url: 'stores/',
+            templateProvider: function (UserDetailsService, $templateFactory) {
+              if (UserDetailsService.getRole() == "Store Admin")
+                return $templateFactory.fromUrl("/tpl/list-stores-admin.html");
+              else
+                return $templateFactory.fromUrl("/tpl/list-stores.html");
+            },
+            resolve: {
+              deps: ['$ocLazyLoad',
+                function( $ocLazyLoad ){
+                  return $ocLazyLoad.load([
+                    'ui.select'
+                  ]);
+                }
+              ]
+            }
           }
         )
         .state('app.list-appointments', {
-            url: 'store/',
+            url: 'appointments/',
             templateUrl: '/tpl/list-appointment.html'
+          }
+        )
+        .state('app.list-skills', {
+            url: 'skills/',
+            templateUrl: '/tpl/list-skill.html'
+          }
+        )
+        .state('app.list-roles', {
+            url: 'roles/',
+            templateUrl: '/tpl/list-roles.html'
           }
         )
         .state('app.PADashboard', {

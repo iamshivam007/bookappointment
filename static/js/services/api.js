@@ -147,3 +147,10 @@ app.factory('ServicesService',
     return ServicesAPI
   }
 );
+
+// Choices service
+app.factory('ChoicesService',
+  function (ChoicesAPI) {
+    return ChoicesAPI
+  }
+);

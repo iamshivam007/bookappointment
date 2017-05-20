@@ -1,0 +1,134 @@
+{% verbatim %}
+  <div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3">STORE REGISTER</h1>
+  </div>
+  <div class="wrapper-md" data-ng-controller="ListStoreController"  data-ng-init="itemsByPage=10">
+    <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+    <div class="panel panel-default">
+      <div class="panel-heading text-right">
+        <form class="form-inline" role="form">
+          <button class="btn btn-success" ng-click="addStore()">Add Store</button>
+          <select class="form-control" name="items" id="items" data-ng-model="itemsByPage">
+            <option>10</option>
+            <option>25</option>
+            <option>50</option>
+            <option>100</option>
+          </select>
+        </form>
+      </div>
+      <div class="table-responsive">
+        <table st-table="displayedCollection" st-safe-src="classes" class="table table-striped table-bordered table-hover table-condensed b-t b-b">
+          <thead>
+          <tr>
+            <th class="text-center">SNo.</th>
+            <th class="text-center">Name</th>
+            <th class="text-center">Address</th>
+            <th class="text-center">Services</th>
+            <th class="text-center">Buffer time</th>
+            <th class="text-center">Opening time</th>
+            <th class="text-center">Closing time</th>
+            <th class="text-center">Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr data-ng-repeat="store in stores" class="text-capitalize">
+            <td class="text-center" data-ng-bind="$index+1"></td>
+            <td class="text-center">{{ store.name }}</td>
+            <td class="text-center">{{ store.address }}</td>
+            <td class="text-center"><span ng-repeat="service in store.service_detail">{{ service }}, </span></td>
+            <td class="text-center">{{ store.buffer_time }} Minutes</td>
+            <td class="text-center">{{ store.opening_time|timeFilter }}</td>
+            <td class="text-center">{{ store.closing_time|timeFilter }}</td>
+            <td style="white-space: nowrap" class="text-center">
+              <div class="buttons">
+                <button class="btn btn-sm btn-info" ng-click="editStore(store.id, $index)">Edit</button>
+                <button class="btn btn-sm btn-danger" ng-click="deleteStore(store.id, $index)">Delete</button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- Add Store modal -->
+    <script type="text/ng-template" id="add_store">
+      <div class="modal-header">
+        <h3 class="modal-title">Add Store</h3>
+      </div>
+      <div class="modal-body">
+        <form name="addStoreForm" class="form-validation" novalidate>
+          <div class="form-group clearfix">
+            <div class="col-sm-6">
+              <label>Store Name</label>
+              <input type="text" class="form-control" data-ng-model="store.name" required>
+            </div>
+            <div class="col-sm-6">
+              <label>Store Address</label>
+              <input type="text" class="form-control" data-ng-model="store.address" required>
+            </div>
+          </div>
+          <div class="form-group clearfix">
+            <div class="col-sm-6">
+              <label>Services</label>
+              <ui-select multiple required ng-model="store.services" theme="bootstrap">
+                <ui-select-match placeholder="Choose Services">{{ $item.name }}</ui-select-match>
+                <ui-select-choices repeat="service.id as service in services">
+                  <div ng-bind-html="service.name"></div>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+            <div class="col-sm-6">
+              <label>Working Days</label>
+              <ui-select multiple required ng-model="store.working_days" theme="bootstrap">
+                <ui-select-match placeholder="Select Days">{{ $item.value }}</ui-select-match>
+                <ui-select-choices repeat="day.key as day in days">
+                  <div ng-bind-html="day.value"></div>
+                </ui-select-choices>
+              </ui-select>
+            </div>
+          </div>
+          <div class="form-group clearfix">
+            <div class="col-sm-6">
+              <label>Opening Time</label>
+              <input type="time" class="form-control" data-ng-model="store.opening_time" required>
+            </div>
+            <div class="col-sm-6">
+              <label>Closing Time</label>
+              <input type="time" class="form-control" data-ng-model="store.closing_time" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+            <button ng-if="!store.id" type="submit" id="addStoreForm" class="btn btn-success" data-ng-disabled='addStoreForm.$invalid'
+                    data-ng-click="save()" button-spinner="loading"><span ng-if="!loading">Save</span>
+            </button>
+            <button ng-if="store.id" type="submit" id="addStoreForm" class="btn btn-success" data-ng-disabled='addStoreForm.$invalid'
+                    data-ng-click="update()" button-spinner="loading"><span ng-if="!loading">Save</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </script>
+    <!-- Add Store modal -->
+    <!-- Delete Store modal -->
+    <script type="text/ng-template" id="delete_store">
+      <div class="modal-header">
+        <h3 class="modal-title">Delete Store -{{store.name}} ({{ store.address }}) ?</h3>
+      </div>
+      <div class="modal-body">
+        <form name="deleteStoreForm" class="form-validation" novalidate>
+          <div class="form-group clearfix">
+            Are you sure you want to delete this Store and its related content ?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" ng-click="cancel()">No</button>
+            <button type="submit" id="deleteStoreForm" class="btn btn-danger" data-ng-disabled='deleteStoreForm.$invalid'
+                    data-ng-click="delete()" button-spinner="loading"><span ng-if="!loading">Yes</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </script>
+    <!-- Delete Store modal -->
+  </div>
+{% endverbatim %}
