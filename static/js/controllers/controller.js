@@ -381,3 +381,124 @@ app.controller("SkillController",
     }
   }
 );
+
+// List Roles Controller
+app.controller('ListRolesController',
+  function ($scope, RolesService, $modal, ToasterService) {
+    RolesService.one().get().then(
+      function (success) {
+        $scope.roles = success;
+      }
+    );
+
+    $scope.addRole = function () {
+      var addRoleModalInstance = $modal.open({
+          templateUrl: "add_edit_role",
+          controller: "RoleController",
+          size: undefined,
+          resolve: {
+            id: function () {
+              return ""
+            }
+          }
+        }
+      );
+      addRoleModalInstance.result.then(
+        function (role) {
+          $scope.roles.push(angular.copy(role));
+          ToasterService.successHandler("Role", "Added Successfully")
+        }
+      )
+    };
+
+    $scope.editRole = function (id, index) {
+      var addRoleModalInstance = $modal.open({
+          templateUrl: "add_edit_role",
+          controller: "RoleController",
+          size: undefined,
+          resolve: {
+            id: function () {
+              return id
+            }
+          }
+        }
+      );
+      addRoleModalInstance.result.then(
+        function (role) {
+          $scope.roles[index] = angular.copy(role);
+          ToasterService.successHandler("Role", "Updated Successfully")
+        }
+      )
+    };
+
+    $scope.deleteRole = function (id, index) {
+      var deleteRoleModalInstance = $modal.open({
+          templateUrl: "delete_role",
+          controller: "RoleController",
+          size: undefined,
+          resolve: {
+            id: function () {
+              return id
+            }
+          }
+        }
+      );
+      deleteRoleModalInstance.result.then(
+        function () {
+          $scope.roles.splice(index, 1);
+          ToasterService.successHandler("Role", "Deleted Successfully")
+        }
+      )
+    }
+
+  }
+);
+
+// Role Controller
+app.controller("RoleController",
+  function ($scope, RolesService, $modalInstance,
+  $filter, ResponseHandlerService, id) {
+
+    if (id){
+      RolesService.one(id).get().then(
+        function (success) {
+          $scope.role = success;
+        }
+      )
+    }
+
+    $scope.save = function () {
+      RolesService.one().customPOST($scope.role).then(
+        function (success) {
+          $modalInstance.close(success.plain())
+        },
+        function (error) {
+          ResponseHandlerService.errorHandler(error);
+        }
+      )
+    };
+
+    $scope.update = function () {
+      RolesService.one(id).patch($scope.role).then(
+        function (success) {
+          $modalInstance.close(success.plain())
+        },
+        function (error) {
+          ResponseHandlerService.errorHandler(error);
+        }
+      )
+    };
+
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+
+    $scope.delete = function () {
+      RolesService.one(id).remove().then(
+        function (success) {
+          $modalInstance.close(success);
+        }
+      )
+    }
+  }
+);

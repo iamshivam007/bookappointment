@@ -90,8 +90,8 @@ app.run(
           }
         )
         .state('app.list-roles', {
-            url: 'role/',
-            templateUrl: '/tpl/list-role.html'
+            url: 'roles/',
+            templateUrl: '/tpl/list-roles.html'
           }
         )
         .state('app.PADashboard', {
