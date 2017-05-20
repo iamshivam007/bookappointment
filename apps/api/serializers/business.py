@@ -3,6 +3,7 @@ from rest_framework import serializers, fields
 from apps.core.models.business import *
 from utils.utils import values_from_queryset
 from utils.choices import WEEK_DAYS_CHOICES
+from utils.utils import Base64ImageField
 
 
 class StoreSerializer(serializers.ModelSerializer):
@@ -17,6 +18,7 @@ class StoreSerializer(serializers.ModelSerializer):
 
 
 class StoreAdminSerializer(serializers.ModelSerializer):
+    image = Base64ImageField(required=False)
 
     class Meta:
         model = StoreAdmin

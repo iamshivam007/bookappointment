@@ -12,6 +12,8 @@ from utils.choices import *
 class StoreAdmin(TimeStampedModel):
     user = models.OneToOneField(User)
     phone_number = PhoneNumberField()
+    image = models.ImageField(upload_to="photos/", blank=True, default="photos/default_photo.jpg")
+
 
     def __str__(self):
         return "{0}-{1}".format(self.user, self.phone_number)

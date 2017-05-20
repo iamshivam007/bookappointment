@@ -11,6 +11,7 @@ from utils.choices import *
 class PersonalAssistant(TimeStampedModel):
     user = models.OneToOneField(User)
     phone_number = PhoneNumberField()
+    image = models.ImageField(upload_to="photos/", blank=True, default="photos/default_photo.jpg")
     available_days = MultiSelectField(choices=WEEK_DAYS_CHOICES, blank=True, null=True)
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)

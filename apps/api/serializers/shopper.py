@@ -3,10 +3,12 @@ from rest_framework import serializers
 from apps.api.serializers.accounts import UserSerializer
 from apps.api.serializers.business import StoreSerializer, ServiceSerializer
 from apps.core.models.shopper import *
+from utils.utils import Base64ImageField
 
 
 class ShopperSerializer(serializers.ModelSerializer):
     user_detail = serializers.SerializerMethodField()
+    image = Base64ImageField(required=False)
 
     class Meta:
         model = Shopper
