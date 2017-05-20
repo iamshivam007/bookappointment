@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from apps.core.models.assistent import *
 from utils.utils import Base64ImageField
-from apps.api.serializers import RoleSerializer, UserSerializer, ServiceSerializer
+from apps.api.serializers import RoleSerializer, UserSerializer, ServiceSerializer, StoreSerializer
 
 
 class PersonalAssistantSerializer(serializers.ModelSerializer):
@@ -45,6 +45,14 @@ class RoleSubscriptionSerializer(serializers.ModelSerializer):
 
 
 class StoreSubscriptionSerializer(serializers.ModelSerializer):
+    personal_assistant_detail = serializers.SerializerMethodField()
+    store_detail = serializers.SerializerMethodField()
 
     class Meta:
         model = StoreSubscription
+
+    def get_personal_assistant_detail(self, store_subscription):
+        return PersonalAssistantSerializer(store_subscription.personal_assistant).data
+
+    def get_store_detail(self, store_subscription):
+        return StoreSerializer(store_subscription.store).data
