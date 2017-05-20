@@ -264,6 +264,54 @@ app.controller("CancelAppointmentController",
   }
 );
 
+// List Store Subscription Controller
+app.controller('ListStoreSubscriptionsController',
+  function ($scope, StoreSubscriptionsService, $modal, ToasterService, $filter) {
+
+    $scope.status = "pending";
+
+    $scope.getStoreSubscriptions = function () {
+      StoreSubscriptionsService.one().get().then(
+        function (success) {
+          $scope.allStoreSubscriptions = success;
+          $scope.changeStatus();
+        }
+      );
+    };
+
+    $scope.getStoreSubscriptions();
+
+    $scope.changeStatus = function () {
+      if($scope.status == 'pending'){
+        $scope.storeSubscriptions = $filter('filter')($scope.allStoreSubscriptions, {'is_approved':false});
+      }
+      if($scope.status == 'verified'){
+        $scope.storeSubscriptions = $filter('filter')($scope.allStoreSubscriptions, {'is_approved':true});
+      }
+    };
+
+    $scope.disApprove_store = function (id, index) {
+      $scope.storeSubscriptions[index].is_approved = false;
+      StoreSubscriptionsService.one(id).patch($scope.storeSubscriptions[index]).then(
+        function (success) {
+          ToasterService.successHandler("Store", "DisApproved Successfully.");
+          $scope.getStoreSubscriptions();
+        }
+      );
+    };
+
+    $scope.Approve_store = function (id, index) {
+      $scope.storeSubscriptions[index].is_approved = true;
+      StoreSubscriptionsService.one(id).patch($scope.storeSubscriptions[index]).then(
+        function (success) {
+          ToasterService.successHandler("Store", "Approved Successfully.");
+          $scope.getStoreSubscriptions();
+        }
+      );
+    }
+  }
+);
+
 // List Skills Controller
 app.controller('ListSkillsController',
   function ($scope, SkillsService, $modal, ToasterService) {
@@ -688,7 +736,7 @@ app.controller('ListServiceSubscriptionsController',
 
     $scope.status = "pending";
 
-    $scope.getSkillSubscriptions = function () {
+    $scope.getServiceSubscriptions = function () {
       ServiceSubscriptionsService.one().get().then(
         function (success) {
           $scope.allServiceSubscriptions = success;
@@ -697,7 +745,7 @@ app.controller('ListServiceSubscriptionsController',
       );
     };
 
-    $scope.getSkillSubscriptions();
+    $scope.getServiceSubscriptions();
 
     $scope.changeStatus = function () {
       if($scope.status == 'pending'){
@@ -713,7 +761,7 @@ app.controller('ListServiceSubscriptionsController',
       ServiceSubscriptionsService.one(id).patch($scope.serviceSubscriptions[index]).then(
         function (success) {
           ToasterService.successHandler("Service", "DisApproved Successfully.");
-          $scope.getSkillSubscriptions();
+          $scope.getServiceSubscriptions();
         }
       );
     };
@@ -723,7 +771,7 @@ app.controller('ListServiceSubscriptionsController',
       ServiceSubscriptionsService.one(id).patch($scope.serviceSubscriptions[index]).then(
         function (success) {
           ToasterService.successHandler("Service", "Approved Successfully.");
-          $scope.getSkillSubscriptions();
+          $scope.getServiceSubscriptions();
         }
       );
     }

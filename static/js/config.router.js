@@ -79,6 +79,20 @@ app.run(
             }
           }
         )
+        .state('app.list-store-subscription', {
+            url: 'storesubscriptions/',
+            templateUrl: '/tpl/list-store-subscriptions.html',
+            resolve: {
+              deps: ['$ocLazyLoad',
+                function( $ocLazyLoad ){
+                  return $ocLazyLoad.load([
+                    'smart-table'
+                  ]);
+                }
+              ]
+            }
+          }
+        )
         .state('app.list-appointments', {
             url: 'appointments/',
             templateUrl: '/tpl/list-appointment.html'
