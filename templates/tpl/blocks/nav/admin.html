@@ -32,14 +32,23 @@
   <!-- Skill -->
   <!-- Role -->
   <li>
-    <a class="auto" ui-sref="app.list-roles">
-      <i class="fa fa-institution icon text-warning"></i>
+    <a class="auto">
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="fa fa-institution icon text-info-lter"></i>
       <span class="text-warning">Roles</span>
     </a>
     <ul class="nav nav-sub dk">
-      <li class="nav-sub-header">
+      <li ui-sref-active="active">
         <a ui-sref="app.list-roles">
-          <span class="text-warning">Roles</span>
+          <span class="text-black">Roles</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.list-role-subscription">
+          <span class="text-black">Role Subscription</span>
         </a>
       </li>
     </ul>

@@ -1,3 +1,7 @@
+function convertFileToBase64String(file) {
+  return "data:" + file.filetype + ";base64," + file.base64;
+}
+
 app.controller('ListStoreController',
   function ($scope, $modal, StoresService, ToasterService) {
     StoresService.one().get().then(
@@ -500,5 +504,60 @@ app.controller("RoleController",
         }
       )
     }
+  }
+);
+
+// List Role Subscription Controller
+app.controller('ListRoleSubscriptionsController',
+  function ($scope, RolesService, $modal, ToasterService, RoleSubscriptionsService, $filter) {
+
+    $scope.status = "pending";
+
+    RolesService.one().get().then(
+      function (success) {
+        $scope.roles = success;
+      }
+    );
+
+    $scope.getRoleSubscriptions = function () {
+      RoleSubscriptionsService.one().get().then(
+        function (success) {
+          $scope.allRoleSubscriptions = success;
+          $scope.changeStatus();
+        }
+      );
+    };
+
+    $scope.getRoleSubscriptions();
+
+    $scope.changeStatus = function () {
+      if($scope.status == 'pending'){
+        $scope.roleSubscriptions = $filter('filter')($scope.allRoleSubscriptions, {'is_approved':false});
+      }
+      if($scope.status == 'verified'){
+        $scope.roleSubscriptions = $filter('filter')($scope.allRoleSubscriptions, {'is_approved':true});
+      }
+    };
+
+    $scope.disApprove_role = function (id, index) {
+      $scope.roleSubscriptions[index].is_approved = false;
+      RoleSubscriptionsService.one(id).patch($scope.roleSubscriptions[index]).then(
+        function (success) {
+          ToasterService.successHandler("Role", "DisApproved Successfully.");
+          $scope.getRoleSubscriptions();
+        }
+      );
+    };
+
+    $scope.Approve_role = function (id, index) {
+      $scope.roleSubscriptions[index].is_approved = true;
+      RoleSubscriptionsService.one(id).patch($scope.roleSubscriptions[index]).then(
+        function (success) {
+          ToasterService.successHandler("Role", "Approved Successfully.");
+          $scope.getRoleSubscriptions();
+        }
+      );
+    }
+
   }
 );

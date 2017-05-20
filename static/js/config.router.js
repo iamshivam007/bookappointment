@@ -94,6 +94,20 @@ app.run(
             templateUrl: '/tpl/list-roles.html'
           }
         )
+        .state('app.list-role-subscription', {
+            url: 'rolesubscriptions/',
+            templateUrl: '/tpl/list-role-subscriptions.html',
+            resolve: {
+              deps: ['$ocLazyLoad',
+                function( $ocLazyLoad ){
+                  return $ocLazyLoad.load([
+                    'smart-table'
+                  ]);
+                }
+              ]
+            }
+          }
+        )
         .state('app.PADashboard', {
             url: '/class/:id/',
             templateUrl: '/tpl/class_profile.html'
