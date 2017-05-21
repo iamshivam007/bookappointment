@@ -9,21 +9,29 @@ class UserFilterSet(drf_filters.FilterSet):
 
 
 class PersonalAssistantFilterSet(drf_filters.FilterSet):
+    user = drf_filters.RelatedFilter(UserFilterSet)
+
     class Meta:
         model = PersonalAssistant
 
 
 class ServiceSubscriptionFilterSet(drf_filters.FilterSet):
+    personal_assistant = drf_filters.RelatedFilter(PersonalAssistantFilterSet)
+
     class Meta:
         model = ServiceSubscription
 
 
 class RoleSubscriptionFilterSet(drf_filters.FilterSet):
+    personal_assistant = drf_filters.RelatedFilter(PersonalAssistantFilterSet)
+
     class Meta:
         model = RoleSubscription
 
 
 class StoreSubscriptionFilterSet(drf_filters.FilterSet):
+    personal_assistant = drf_filters.RelatedFilter(PersonalAssistantFilterSet)
+
     class Meta:
         model = StoreSubscription
 
@@ -34,11 +42,15 @@ class StoreAdminFilterSet(drf_filters.FilterSet):
 
 
 class StoreFilterSet(drf_filters.FilterSet):
+    storesubscription = drf_filters.RelatedFilter(StoreSubscriptionFilterSet)
+
     class Meta:
         model = Store
 
 
 class ServiceFilterSet(drf_filters.FilterSet):
+    servicesubscription = drf_filters.RelatedFilter(ServiceSubscriptionFilterSet)
+
     class Meta:
         model = Service
 
@@ -49,6 +61,8 @@ class SkillFilterSet(drf_filters.FilterSet):
 
 
 class RoleFilterSet(drf_filters.FilterSet):
+    rolesubscription = drf_filters.RelatedFilter(RoleSubscriptionFilterSet)
+
     class Meta:
         model = Role
 
