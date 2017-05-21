@@ -2,7 +2,7 @@
 <div class="bg-light lter b-b wrapper-md">
   <h1 class="m-n font-thin h3">Appointments</h1>
 </div>
-<div class="wrapper-md" data-ng-controller="ListAppointmentsController"  data-ng-init="itemsByPage=10">
+<div class="wrapper-md" data-ng-controller="ListAppointmentShipsController"  data-ng-init="itemsByPage=10">
   <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
   <div class="panel panel-default">
     <div class="panel-heading text-right">
@@ -29,26 +29,29 @@
           <th class="text-center">Service Name</th>
           <th class="text-center">Service Cost</th>
           <th class="text-center">Date</th>
-          <th class="text-center">Time</th>
+          <!--<th class="text-center">Time</th>!-->
           <th class="text-center">Status</th>
           <th class="text-center">Action</th>
         </tr>
         </thead>
         <tbody>
-        <tr data-ng-repeat="appointment in appointments">
+        <tr data-ng-repeat="appointmentship in appointmentships">
           <td class="text-center" data-ng-bind="$index+1"></td>
-          <td class="text-center">{{ appointment.store_detail.name}} ({{ appointment.store_detail.address }})</td>
-          <td class="text-center">{{ appointment.shopper_detail.user_detail.first_name }}</td>
-          <td class="text-center">{{ appointment.shopper_detail.phone_number }}</td>
-          <td class="text-center">{{ appointment.service_detail.name }}</td>
-          <td class="text-center">{{ appointment.service_detail.price }}</td>
-          <td class="text-center">{{ appointment.date|date:"dd-MMM-yyyy"}}</td>
-          <td class="text-center">{{ appointment.start_time|timeFilter}} - {{ appointment.end_time|timeFilter}}</td>
-          <td class="text-center" ng-if="appointment.status != 'Cancel'">{{ appointment.status}}</td>
-          <td class="text-center text-danger" ng-if="appointment.status == 'Cancel'">Cancelled</td>
+          <td class="text-center">{{ appointmentship.appointment_detail.store_detail.name}} ({{ appointmentship.appointment_detail.store_detail.address }})</td>
+          <td class="text-center">{{ appointmentship.appointment_detail.shopper_detail.user_detail.first_name }}</td>
+          <td class="text-center">{{ appointmentship.appointment_detail.shopper_detail.phone_number }}</td>
+          <td class="text-center">{{ appointmentship.appointment_detail.service_detail.name }}</td>
+          <td class="text-center">{{ appointmentship.appointment_detail.service_detail.price }}</td>
+          <td class="text-center">{{ appointmentship.appointment_detail.date|date:"dd-MMM-yyyy"}}</td>
+          <!--<td class="text-center">{{ appointmentships.appointment_detail.start_time|timeFilter}} - {{ appointment.end_time|timeFilter}}</td>!-->
+          <td class="text-center" ng-if="['Booked', 'Cancel', 'Rejected'].indexOf(appointment.status)==-1">{{ appointment.status}}</td>
+          <td class="text-center text-danger" ng-if="appointmentship.appointment_detail.status == 'Cancel'">Cancelled</td>
+          <td class="text-center text-danger" ng-if="appointmentship.appointment_detail.status == 'Rejected'">Rejected</td>
+          <td class="text-center text-success text-capitalize" ng-if="appointmentship.appointment_detail.status == 'Booked'" ui-sref="app.view-personal-assistant({username:appointment.personal_assistant.user_detail.username})">
+            {{ appointmentship.appointment_detail.status }} ({{ appointmentship.appointment_detail.personal_assistant.user_detail.first_name }})</td>
           <td style="white-space: nowrap" class="text-center">
             <div class="buttons">
-              <button ng-if="appointment.status != 'Cancel'" class="btn btn-sm btn-danger" ng-click="cancelAppointment(appointment.id, $index)">Cancel</button>
+              <button ng-if="['Booked', 'Cancel', 'Rejected'].indexOf(appointmentship.appointment_detail.status)==-1" class="btn btn-sm btn-success" ng-click="acceptAppointment(appointment.appointment_detail.id, $index)">Accept</button>
             </div>
           </td>
         </tr>
