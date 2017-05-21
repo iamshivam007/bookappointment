@@ -5192,7 +5192,7 @@ a.text-#000000:hover {
   height: 100px;
   width: 100px;
 }
-.bookbtn{
+.btn{
 	background-color: #4CAF50; /* Green */
     border: none;
     color: white;
@@ -5202,3 +5202,21 @@ a.text-#000000:hover {
     display: inline-block;
     font-size: 16px;
 }
+.mycard {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 60%;
+    margin: auto;
+    text-align: center;
+}
+
+.mycontainer {
+    padding: 0 16px;
+}
+
+.title {
+    color: grey;
+    font-size: 18px;
+}
+
+
+
