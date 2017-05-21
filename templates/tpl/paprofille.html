@@ -1,0 +1,218 @@
+{% verbatim %}
+  <div class="hbox hbox-auto-xs hbox-auto-sm" data-ng-controller="PAProfileController">
+    <div class="col">
+      <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+      <div style="background:url(/dashboard/img/c4.jpg) center center; background-size:cover">
+        <div class="wrapper-lg bg-white-opacity">
+          <div class="row m-t">
+            <div class="col-sm-12">
+              <a href class="thumb-lg pull-left m-r">
+                <img data-ng-src="{{personalAssistant.image}}" class="img-circle">
+              </a>
+              <div class="clear m-b">
+                <div class="m-b m-t-sm">
+                <span class="h3 text-black text-capitalize"
+                      data-ng-bind="personalAssistant.user_detail.first_name">
+                </span>
+                  <span class="m-l" data-ng-bind="personalAssistant.phone_number"></span>
+                  <span class="m-l" data-ng-bind="personalAssistant.user_detail.email"></span>
+                  <br>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wrapper-md">
+        <us-spinner></us-spinner>
+        <tabset class="tab-container" ng-init="steps={step1:true, step2:false, step3:false}">
+          <tab heading="Services" active="steps.step1">
+            <div class="row">
+              <div class="col-md-4">
+                <form name="personalDetailsForm" class="form-validation" novalidate>
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      <h4><b>Approved Services</b></h4>
+                      <div class="form-group pull-in" ng-repeat="verifiedservice in verifiedServices">
+                        <div ng-if="loggedInUser.role!='Personal Assistant'" class="col-sm-12 text-capitalize">
+                          <h5><label><b>{{ $index+1 }}. {{ verifiedservice.service_detail.name }}</b></label></h5>
+                        </div>
+                        <div ng-if="loggedInUser.role=='Personal Assistant'" class="col-sm-6 text-capitalize">
+                          <h5><label><b>{{ $index+1 }}. {{ verifiedservice.service_detail.name }}</b></label></h5>
+                        </div>
+                        <div ng-if="loggedInUser.role=='Personal Assistant'" class="col-sm-6">
+                          <h5><label><button class="btn btn-sm btn-danger" ng-click="removeService(verifiedservice.id, $index,'verified')">Remove</button></label></h5>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div ng-if="loggedInUser.role!='Shopper'" class="col-md-4">
+                <form name="personalDetailsForm" class="form-validation" novalidate>
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      <h4><b>Pending Services</b></h4>
+                      <div class="form-group pull-in" ng-repeat="pendingService in pendingServices">
+                        <div class="col-sm-6 text-capitalize">
+                          <h5><label><b>{{ $index+1 }}. {{ pendingService.service_detail.name }}</b></label></h5>
+                        </div>
+                        <div ng-if="loggedInUser.role=='Personal Assistant'" class="col-sm-6">
+                          <h5><label><button class="btn btn-sm btn-danger" ng-click="removeService(pendingService.id, $index, 'pending')">Remove</button></label></h5>
+                        </div>
+                        <div ng-if="loggedInUser.role=='Store Admin'" class="col-sm-6">
+                          <h5><label><button class="btn btn-sm btn-success" ng-click="approveService(pendingService.id, $index)">Approve</button></label></h5>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div ng-if="loggedInUser.role=='Personal Assistant'" class="col-md-4">
+                <form name="personalDetailsForm" class="form-validation" novalidate>
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      <h4><b>Add More Services</b></h4>
+                      <div class="form-group pull-in" ng-repeat="unAppliedService in unAppliedServices">
+                        <div class="col-sm-6 text-capitalize">
+                          <h5><label><b>{{ $index+1 }}. {{ unAppliedService.name }} ({{ unAppliedService.price }})</b></label></h5>
+                        </div>
+                        <div class="col-sm-6">
+                          <h5><label><button class="btn btn-sm btn-success" ng-click="addService(unAppliedService.id, $index)">Subscribe</button></label></h5>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </tab>
+          <!-- Role Tab !-->
+          <tab heading="Roles">
+            <div class="row">
+              <div class="col-md-4">
+                <form name="personalDetailsForm" class="form-validation" novalidate>
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      <h4><b>Approved Roles</b></h4>
+                      <div class="form-group pull-in" ng-repeat="verifiedrole in verifiedRoles">
+                        <div ng-if="loggedInUser.role!='Personal Assistant'" class="col-sm-12 text-capitalize">
+                          <h5><label><b>{{ $index+1 }}. {{ verifiedrole.role_detail.name }}</b></label></h5>
+                        </div>
+                        <div ng-if="loggedInUser.role=='Personal Assistant'" class="col-sm-6 text-capitalize">
+                          <h5><label><b>{{ $index+1 }}. {{ verifiedrole.role_detail.name }}</b></label></h5>
+                        </div>
+                        <div ng-if="loggedInUser.role=='Personal Assistant'" class="col-sm-6">
+                          <h5><label><button class="btn btn-sm btn-danger" ng-click="removeRole(verifiedrole.id, $index,'verified')">Remove</button></label></h5>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div ng-if="loggedInUser.role!='Shopper'" class="col-md-4">
+                <form name="personalDetailsForm" class="form-validation" novalidate>
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      <h4><b>Pending Roles</b></h4>
+                      <div class="form-group pull-in" ng-repeat="pendingRole in pendingRoles">
+                        <div class="col-sm-6 text-capitalize">
+                          <h5><label><b>{{ $index+1 }}. {{ pendingRole.role_detail.name }}</b></label></h5>
+                        </div>
+                        <div ng-if="loggedInUser.role=='Personal Assistant'" class="col-sm-6">
+                          <h5><label><button class="btn btn-sm btn-danger" ng-click="removeRole(pendingRole.id, $index, 'pending')">Remove</button></label></h5>
+                        </div>
+                        <div ng-if="loggedInUser.role=='Store Admin'" class="col-sm-6">
+                          <h5><label><button class="btn btn-sm btn-success" ng-click="approveRole(pendingRole, $index)">Approve</button></label></h5>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div ng-if="loggedInUser.role=='Personal Assistant'" class="col-md-4">
+                <form name="personalDetailsForm" class="form-validation" novalidate>
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      <h4><b>Add More Roles</b></h4>
+                      <div class="form-group pull-in" ng-repeat="unAppliedRole in unAppliedRoles">
+                        <div class="col-sm-6 text-capitalize">
+                          <h5><label><b>{{ $index+1 }}. {{ unAppliedRole.name }}</b></label></h5>
+                        </div>
+                        <div class="col-sm-6">
+                          <h5><label><button class="btn btn-sm btn-success" ng-click="addRole(unAppliedRole.id, $index)">Subscribe</button></label></h5>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </tab>
+          <!-- Store Tab !-->
+          <tab heading="Stores">
+            <div class="row">
+              <div class="col-md-4">
+                <form name="personalDetailsForm" class="form-validation" novalidate>
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      <h4><b>Approved Stores</b></h4>
+                      <div class="form-group pull-in" ng-repeat="verifiedstore in verifiedStores">
+                        <div ng-if="loggedInUser.role!='Personal Assistant'" class="col-sm-12 text-capitalize">
+                          <h5><label><b>{{ $index+1 }}. {{ verifiedstore.store_detail.name }}</b></label></h5>
+                        </div>
+                        <div ng-if="loggedInUser.role=='Personal Assistant'" class="col-sm-6 text-capitalize">
+                          <h5><label><b>{{ $index+1 }}. {{ verifiedstore.store_detail.name }}</b></label></h5>
+                        </div>
+                        <div ng-if="loggedInUser.role=='Personal Assistant'" class="col-sm-6">
+                          <h5><label><button class="btn btn-sm btn-danger" ng-click="removeStore(verifiedstore.id, $index,'verified')">Remove</button></label></h5>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div ng-if="loggedInUser.role!='Shopper'" class="col-md-4">
+                <form name="personalDetailsForm" class="form-validation" novalidate>
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      <h4><b>Pending Stores</b></h4>
+                      <div class="form-group pull-in" ng-repeat="pendingStore in pendingStores">
+                        <div class="col-sm-6 text-capitalize">
+                          <h5><label><b>{{ $index+1 }}. {{ pendingStore.store_detail.name }}</b></label></h5>
+                        </div>
+                        <div ng-if="loggedInUser.role=='Personal Assistant'" class="col-sm-6">
+                          <h5><label><button class="btn btn-sm btn-danger" ng-click="removeStore(pendingStore.id, $index, 'pending')">Remove</button></label></h5>
+                        </div>
+                        <div ng-if="loggedInUser.role=='Store Admin'" class="col-sm-6">
+                          <h5><label><button class="btn btn-sm btn-success" ng-click="approveStore(pendingStore, $index)">Approve</button></label></h5>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div ng-if="loggedInUser.role=='Personal Assistant'" class="col-md-4">
+                <form name="personalDetailsForm" class="form-validation" novalidate>
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      <h4><b>Add More Stores</b></h4>
+                      <div class="form-group pull-in" ng-repeat="unAppliedStore in unAppliedStores">
+                        <div class="col-sm-6 text-capitalize">
+                          <h5><label><b>{{ $index+1 }}. {{ unAppliedStore.name }} ({{ unAppliedStore.address }})</b></label></h5>
+                        </div>
+                        <div class="col-sm-6">
+                          <h5><label><button class="btn btn-sm btn-success" ng-click="addStore(unAppliedStore.id, $index)">Subscribe</button></label></h5>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </tab>
+        </tabset>
+      </div>
+    </div>
+  </div>
+{% endverbatim %}

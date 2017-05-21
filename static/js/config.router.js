@@ -93,9 +93,23 @@ app.run(
             }
           }
         )
-		.state('app.personalassistance/profile', {
-            url: '/personalassistance/profile/:username',
-            templateUrl: '/tpl/blocks/paprofile.html',
+        .state('app.list-personal-assistant', {
+            url: 'personal-assistant/',
+            templateUrl: '/tpl/list-personal-assistants.html',
+            resolve: {
+              deps: ['$ocLazyLoad',
+                function( $ocLazyLoad ){
+                  return $ocLazyLoad.load([
+                    'smart-table'
+                  ]);
+                }
+              ]
+            }
+          }
+        )
+        .state('app.view-personal-assistant', {
+            url: '/personalassistant/:username/',
+            templateUrl: '/tpl/paprofille.html',
             resolve: {
               deps: ['$ocLazyLoad',
                 function( $ocLazyLoad ){

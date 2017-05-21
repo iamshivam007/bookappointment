@@ -15,7 +15,7 @@ app.controller('HeaderController',
 /* Login Controller */
 app.controller('LoginController',
   function(
-    $scope, $state, LoginService, UsersService, PersonalAssistantService, ToasterService,
+    $scope, $state, LoginService, UsersService, PersonalAssistantService, ToasterService, LogoutService,
     ResponseHandlerService, StoreAdminService, ShopperService, UserDetailsService, $rootScope) {
     $scope.roles = ['Store Admin', 'Shopper', 'Personal Assistant'];
     $scope.loading = false;
@@ -43,8 +43,15 @@ app.controller('LoginController',
         function (success) {
           if (success[0].roles.indexOf($scope.user.role) == -1){
             ToasterService.errorHandler("Error", "Wrong Login Credentials. you are not a "+$scope.user.role);
+            LogoutService.logout().then(
+              function() {
+                UserDetailsService.clear();
+                delete $localStorage.settings;
+              }
+            );
           }
           else {
+            success[0].role = $scope.user.role;
             UserDetailsService.setDetails(success[0]);
             UserDetailsService.setName(success[0].first_name);
             UserDetailsService.setRole($scope.user.role);
