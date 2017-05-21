@@ -778,7 +778,242 @@ app.controller('ListServiceSubscriptionsController',
   }
 );
 
-app.controller('PAProfileController',function($scope,$stateParams,PersonalAssistantService){
-	console.log("sa");
-	console.log($stateParams.username);
-});
+// List Personal Assistants Controller
+app.controller('ListPersonalAssistant',
+  function ($scope, PersonalAssistantService) {
+
+    PersonalAssistantService.one().get().then(
+      function (success) {
+        $scope.personalAssistants = success;
+      },
+      function (error) {
+        console.log(error);
+      }
+    )
+  }
+);
+
+app.controller('PAProfileController',
+  function($scope, $stateParams, PersonalAssistantService, RoleSubscriptionsService,
+  ServiceSubscriptionsService, StoreSubscriptionsService, $filter, ServicesService, ToasterService,
+  RolesService, StoresService, UserDetailsService){
+
+    $scope.username=  $stateParams.username;
+    $scope.loggedInUser = UserDetailsService.getDetails();
+
+    ServicesService.one().get({'servicesubscription__personal_assistant__user__username':$scope.username}).then(
+      function (success) {
+        $scope.subscribedService = success;
+      },
+      function (error) {
+        console.log(error);
+      }
+    );
+
+    PersonalAssistantService.one().get({'user__username':$scope.username}).then(
+      function (success) {
+        $scope.personalAssistant = success[0];
+        $scope.getServiceSubscriptions();
+        $scope.getUnAppliedService();
+        $scope.getRoleSubscriptions();
+        $scope.getUnAppliedRole();
+        $scope.getStoreSubscriptions();
+        $scope.getUnAppliedStore();
+      }
+    );
+
+    $scope.getServiceSubscriptions = function () {
+      ServiceSubscriptionsService.one().get({'personal_assistant':$scope.personalAssistant.id}).then(
+        function (success) {
+          $scope.pendingServices = $filter('filter')(success, {'is_approved':false});
+          $scope.verifiedServices = $filter('filter')(success, {'is_approved':true});
+        }
+      )
+    };
+
+    $scope.getUnAppliedService = function () {
+      ServicesService.one().get().then(
+        function (success) {
+          $scope.allServices = success;
+          $scope.unAppliedServices = $filter('filter')(success, function (value, index, array) {
+            return !$filter('filter')($scope.subscribedService, {id:value.id}).length
+          })
+        }
+      );
+    };
+
+    $scope.addService = function (id, index) {
+      var payload = {'service': id, 'personal_assistant':$scope.personalAssistant.id};
+      ServiceSubscriptionsService.one().customPOST(payload).then(
+        function (success) {
+          ToasterService.successHandler("Service", "Added Successfully.");
+          $scope.pendingServices.push(success);
+          $scope.unAppliedServices.splice(index, 1);
+        }
+      )
+    };
+
+    $scope.removeService = function (id, index, category) {
+      ServiceSubscriptionsService.one(id).remove().then(
+        function (success) {
+          ToasterService.successHandler("Service", "Removed Successfully.");
+          if (category == 'pending'){
+            $scope.unAppliedServices.push($scope.pendingServices[index].service_detail);
+            $scope.pendingServices.splice(index, 1);
+          }
+          if (category == 'verified'){
+            $scope.unAppliedServices.push($scope.verifiedServices[index].service_detail);
+            $scope.verifiedServices.splice(index, 1);
+          }
+        }
+      )
+    };
+
+    $scope.approveService = function (serviceSubscription, index) {
+      serviceSubscription.is_approved = true;
+      ServiceSubscriptionsService.one(serviceSubscription.id).patch(serviceSubscription).then(
+        function (success) {
+          ToasterService.successHandler("Service", "Approved Successfully.");
+          $scope.verifiedServices.push(success);
+          $scope.pendingServices.splice(index, 1);
+        }
+      );
+    };
+
+    // Role Tab
+    RolesService.one().get({'rolesubscription__personal_assistant__user__username':$scope.username}).then(
+      function (success) {
+        $scope.subscribedRole = success;
+      },
+      function (error) {
+        console.log(error);
+      }
+    );
+
+    $scope.getRoleSubscriptions = function () {
+      RoleSubscriptionsService.one().get({'personal_assistant':$scope.personalAssistant.id}).then(
+        function (success) {
+          $scope.pendingRoles = $filter('filter')(success, {'is_approved':false});
+          $scope.verifiedRoles = $filter('filter')(success, {'is_approved':true});
+        }
+      )
+    };
+
+    $scope.getUnAppliedRole = function () {
+      RolesService.one().get().then(
+        function (success) {
+          $scope.allRoles = success;
+          $scope.unAppliedRoles = $filter('filter')(success, function (value, index, array) {
+            return !$filter('filter')($scope.subscribedRole, {id:value.id}).length
+          });
+        }
+      );
+    };
+
+    $scope.addRole = function (id, index) {
+      var payload = {'role': id, 'personal_assistant':$scope.personalAssistant.id};
+      RoleSubscriptionsService.one().customPOST(payload).then(
+        function (success) {
+          ToasterService.successHandler("Role", "Added Successfully.");
+          $scope.pendingRoles.push(success);
+          $scope.unAppliedRoles.splice(index, 1);
+        }
+      )
+    };
+
+    $scope.removeRole = function (id, index, category) {
+      RoleSubscriptionsService.one(id).remove().then(
+        function (success) {
+          ToasterService.successHandler("Role", "Removed Successfully.");
+          if (category == 'pending'){
+            $scope.unAppliedRoles.push($scope.pendingRoles[index].role_detail);
+            $scope.pendingRoles.splice(index, 1);
+          }
+          if (category == 'verified'){
+            $scope.unAppliedRoles.push($scope.verifiedRoles[index].role_detail);
+            $scope.verifiedRoles.splice(index, 1);
+          }
+        }
+      )
+    };
+
+    $scope.approveRole = function (roleSubscription, index) {
+      roleSubscription.is_approved = true;
+      RoleSubscriptionsService.one(roleSubscription.id).patch(roleSubscription).then(
+        function (success) {
+          ToasterService.successHandler("Role", "Approved Successfully.");
+          $scope.verifiedRoles.push(success);
+          $scope.pendingRoles.splice(index, 1);
+        }
+      );
+    };
+
+    // Store Tab
+    StoresService.one().get({'storesubscription__personal_assistant__user__username':$scope.username}).then(
+      function (success) {
+        $scope.subscribedStore = success;
+      },
+      function (error) {
+        console.log(error);
+      }
+    );
+
+    $scope.getStoreSubscriptions = function () {
+      StoreSubscriptionsService.one().get({'personal_assistant':$scope.personalAssistant.id}).then(
+        function (success) {
+          $scope.pendingStores = $filter('filter')(success, {'is_approved':false});
+          $scope.verifiedStores = $filter('filter')(success, {'is_approved':true});
+        }
+      )
+    };
+
+    $scope.getUnAppliedStore = function () {
+      StoresService.one().get().then(
+        function (success) {
+          $scope.allStores = success;
+          $scope.unAppliedStores = $filter('filter')(success, function (value, index, array) {
+            return !$filter('filter')($scope.subscribedStore, {id:value.id}).length
+          });
+        }
+      );
+    };
+
+    $scope.addStore = function (id, index) {
+      var payload = {'store': id, 'personal_assistant':$scope.personalAssistant.id};
+      StoreSubscriptionsService.one().customPOST(payload).then(
+        function (success) {
+          ToasterService.successHandler("Store", "Added Successfully.");
+          $scope.pendingStores.push(success);
+          $scope.unAppliedStores.splice(index, 1);
+        }
+      )
+    };
+
+    $scope.removeStore = function (id, index, category) {
+      StoreSubscriptionsService.one(id).remove().then(
+        function (success) {
+          ToasterService.successHandler("Store", "Removed Successfully.");
+          if (category == 'pending'){
+            $scope.unAppliedStores.push($scope.pendingStores[index].store_detail);
+            $scope.pendingStores.splice(index, 1);
+          }
+          if (category == 'verified'){
+            $scope.unAppliedStores.push($scope.verifiedStores[index].store_detail);
+            $scope.verifiedStores.splice(index, 1);
+          }
+        }
+      )
+    };
+
+    $scope.approveStore = function (storeSubscription, index) {
+      storeSubscription.is_approved = true;
+      StoreSubscriptionsService.one(storeSubscription.id).patch(storeSubscription).then(
+        function (success) {
+          ToasterService.successHandler("Store", "Approved Successfully.");
+          $scope.verifiedStores.push(success);
+          $scope.pendingStores.splice(index, 1);
+        }
+      );
+    };
+  }
+);
