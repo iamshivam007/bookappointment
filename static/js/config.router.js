@@ -123,7 +123,23 @@ app.run(
         )
         .state('app.list-appointments', {
             url: 'appointments/',
-            templateUrl: '/tpl/list-appointment.html'
+            templateProvider: function (UserDetailsService, $templateFactory) {
+              if (UserDetailsService.getRole() == "Store Admin")
+                return $templateFactory.fromUrl("/tpl/list-appointment_admin.html");
+              else if (UserDetailsService.getRole() == "Personal Assistant")
+                return $templateFactory.fromUrl("/tpl/list-appointment_pa.html");
+              else
+                return $templateFactory.fromUrl("/tpl/list-appointment_shopper.html");
+            },
+            resolve: {
+              deps: ['$ocLazyLoad',
+                function( $ocLazyLoad ){
+                  return $ocLazyLoad.load([
+                    'ui.select'
+                  ]);
+                }
+              ]
+            }
           }
         )
         .state('app.list-skills', {

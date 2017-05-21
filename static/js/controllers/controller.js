@@ -95,7 +95,7 @@ app.controller('ListStoreController',
 
 app.controller("StoreController",
   function ($scope, StoresService, ServicesService, ChoicesService, $modalInstance,
-  $filter, ResponseHandlerService, id) {
+            $filter, ResponseHandlerService, id) {
     $scope.services = [];
     $scope.days = [];
     $scope.store = {};
@@ -167,7 +167,7 @@ app.controller("StoreController",
 
 app.controller('BookAppointmentController',
   function ($scope, $modalInstance, id, StoresService, UserDetailsService, AppointmentsService,
-  ShopperService, ServicesService, $filter) {
+            ShopperService, ServicesService, $filter, PersonalAssistantService, AppointmentShipService) {
     $scope.appointment = {};
     var UserID = UserDetailsService.getUID();
 
@@ -176,6 +176,12 @@ app.controller('BookAppointmentController',
         $scope.store = success[0];
         $scope.appointment.store = id;
         getServices();
+      }
+    );
+
+    PersonalAssistantService.one().get().then(
+      function (success) {
+        $scope.personal_assistants = success;
       }
     );
 
@@ -201,9 +207,24 @@ app.controller('BookAppointmentController',
       appointment.date = $filter('date')($scope.appointment.date, 'yyyy-MM-dd');
       AppointmentsService.one().customPOST(appointment).then(
         function (success) {
+          $scope.setAppointmentShips(success);
           $modalInstance.close(success);
         }
       )
+    };
+
+    $scope.setAppointmentShips = function (appointment) {
+      for(var i=0;i<$scope.personal_assistants.length;i++){
+        var payload = {appointment:appointment.id, personal_assistant:$scope.personal_assistants[i].id}
+        payload.remark = 'Done';
+        AppointmentShipService.one().customPOST(payload).then(
+          function (success) {
+          },
+          function (error) {
+            console.log(error)
+          }
+        )
+      }
     }
   }
 );
@@ -214,13 +235,14 @@ app.controller('ListAppointmentsController',
     AppointmentsService.one().get().then(
       function (success) {
         $scope.appointments = success;
+        console.log()
       }
     );
 
     $scope.cancelAppointment = function (id, index) {
-      var deleteStoreModalInstance = $modal.open({
+      var cancelAppointmentModalInstance = $modal.open({
           templateUrl: "cancel_appointment",
-          controller: "CancelAppointmentController",
+          controller: "AppointmentController",
           size: undefined,
           resolve: {
             id: function () {
@@ -229,22 +251,44 @@ app.controller('ListAppointmentsController',
           }
         }
       );
-      deleteStoreModalInstance.result.then(
+      cancelAppointmentModalInstance.result.then(
         function (appointment) {
           $scope.appointments[index] = angular.copy(appointment);
           ToasterService.successHandler("Appointment", "Canceled Successfully")
         }
       )
-    }
+    };
+
+    $scope.rejectAppointment = function (id, index) {
+      var rejectAppointmentModalInstance = $modal.open({
+          templateUrl: "reject_appointment",
+          controller: "AppointmentController",
+          size: undefined,
+          resolve: {
+            id: function () {
+              return id
+            }
+          }
+        }
+      );
+      rejectAppointmentModalInstance.result.then(
+        function (appointment) {
+          $scope.appointments[index] = angular.copy(appointment);
+          ToasterService.successHandler("Appointment", "Rejected Successfully")
+        }
+      )
+    };
   }
 );
 
-app.controller("CancelAppointmentController",
-  function ($scope, AppointmentsService, id, $modalInstance) {
+app.controller("AppointmentController",
+  function ($scope, AppointmentsService, id, $modalInstance,
+            $filter) {
 
     AppointmentsService.one(id).get().then(
       function (success) {
         $scope.appointment = success;
+        $scope.appointment.Date = $filter('date')($scope.appointment.date, 'dd-MMM-yyyy');
       }
     );
 
@@ -258,11 +302,76 @@ app.controller("CancelAppointmentController",
       );
     };
 
+    $scope.rejectAppointment = function () {
+      var appointment = angular.copy($scope.appointment);
+      appointment.status = "Rejected";
+      AppointmentsService.one(id).patch(appointment).then(
+        function (success) {
+          $modalInstance.close(success);
+        }
+      );
+    };
+
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
     };
   }
 );
+
+// List AppointmentShip Controller
+app.controller('ListAppointmentShipsController',
+  function ($scope, AppointmentsService, $modal, ToasterService, AppointmentShipService,
+            UserDetailsService) {
+
+    var query_param = {personal_assistant__user:UserDetailsService.getUID()};
+    AppointmentShipService.one().get(query_param).then(
+      function (success) {
+        $scope.appointmentships = success;
+      }
+    );
+
+    $scope.cancelAppointment = function (id, index) {
+      var cancelAppointmentModalInstance = $modal.open({
+          templateUrl: "cancel_appointment",
+          controller: "AppointmentController",
+          size: undefined,
+          resolve: {
+            id: function () {
+              return id
+            }
+          }
+        }
+      );
+      cancelAppointmentModalInstance.result.then(
+        function (appointment) {
+          $scope.appointments[index] = angular.copy(appointment);
+          ToasterService.successHandler("Appointment", "Canceled Successfully")
+        }
+      )
+    };
+
+    $scope.rejectAppointment = function (id, index) {
+      var rejectAppointmentModalInstance = $modal.open({
+          templateUrl: "reject_appointment",
+          controller: "AppointmentController",
+          size: undefined,
+          resolve: {
+            id: function () {
+              return id
+            }
+          }
+        }
+      );
+      rejectAppointmentModalInstance.result.then(
+        function (appointment) {
+          $scope.appointments[index] = angular.copy(appointment);
+          ToasterService.successHandler("Appointment", "Rejected Successfully")
+        }
+      )
+    };
+  }
+);
+
 
 // List Store Subscription Controller
 app.controller('ListStoreSubscriptionsController',
@@ -388,7 +497,7 @@ app.controller('ListSkillsController',
 // Skill Controller
 app.controller("SkillController",
   function ($scope, SkillsService, $modalInstance,
-  $filter, ResponseHandlerService, id) {
+            $filter, ResponseHandlerService, id) {
 
     if (id){
       SkillsService.one(id).get().then(
@@ -509,7 +618,7 @@ app.controller('ListRolesController',
 // Role Controller
 app.controller("RoleController",
   function ($scope, RolesService, $modalInstance,
-  $filter, ResponseHandlerService, id) {
+            $filter, ResponseHandlerService, id) {
 
     if (id){
       RolesService.one(id).get().then(
@@ -684,7 +793,7 @@ app.controller('ListServicesController',
 // Service Controller
 app.controller("ServiceController",
   function ($scope, ServicesService, $modalInstance,
-  $filter, ResponseHandlerService, id) {
+            $filter, ResponseHandlerService, id) {
 
     if (id){
       ServicesService.one(id).get().then(
@@ -795,8 +904,8 @@ app.controller('ListPersonalAssistant',
 
 app.controller('PAProfileController',
   function($scope, $stateParams, PersonalAssistantService, RoleSubscriptionsService,
-  ServiceSubscriptionsService, StoreSubscriptionsService, $filter, ServicesService, ToasterService,
-  RolesService, StoresService, UserDetailsService){
+           ServiceSubscriptionsService, StoreSubscriptionsService, $filter, ServicesService, ToasterService,
+           RolesService, StoresService, UserDetailsService){
 
     $scope.username=  $stateParams.username;
     $scope.loggedInUser = UserDetailsService.getDetails();
@@ -876,6 +985,9 @@ app.controller('PAProfileController',
           ToasterService.successHandler("Service", "Approved Successfully.");
           $scope.verifiedServices.push(success);
           $scope.pendingServices.splice(index, 1);
+        },
+        function (error) {
+          console.log(error);
         }
       );
     };

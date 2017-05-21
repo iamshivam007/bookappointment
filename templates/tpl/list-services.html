@@ -5,46 +5,46 @@
   <div class="wrapper-md" data-ng-controller="ListServicesController" data-ng-init="itemsByPage=10">
     <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
     <div class="panel panel-default">
-    <div class="panel-heading text-right">
-      <form class="form-inline" role="form">
-        <button class="btn btn-success" ng-click="addService()">Add Service</button>
-        <select class="form-control" name="items" id="items" data-ng-model="itemsByPage">
-          <option>10</option>
-          <option>25</option>
-          <option>50</option>
-          <option>100</option>
-        </select>
-      </form>
+      <div class="panel-heading text-right">
+        <form class="form-inline" role="form">
+          <button class="btn btn-success" ng-click="addService()">Add Service</button>
+          <select class="form-control" name="items" id="items" data-ng-model="itemsByPage">
+            <option>10</option>
+            <option>25</option>
+            <option>50</option>
+            <option>100</option>
+          </select>
+        </form>
+      </div>
+      <div class="table-responsive">
+        <table st-table="displayedCollection" st-safe-src="classes" class="table table-striped table-bordered table-hover table-condensed b-t b-b">
+          <thead>
+          <tr>
+            <th class="text-center col-sm-1">SNo.</th>
+            <th>Service Name</th>
+            <th>Service Cost</th>
+            <th>Duration</th>
+            <th class="text-center">Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr data-ng-repeat="service in services" class="text-capitalize">
+            <td class="text-center" data-ng-bind="$index+1"></td>
+            <td>{{ service.name }}</td>
+            <td><i class="fa fa-inr" aria-hidden="true"></i> {{ service.price }}</td>
+            <td>{{ service.time_duration }} minutes</td>
+            <td style="white-space: nowrap" class="text-center">
+              <div class="buttons">
+                <button class="btn btn-sm btn-primary" ng-click="editService(service.id, $index)">Edit</button>
+                <button class="btn btn-sm btn-danger" ng-click="deleteService(service.id, $index)">Delete</button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <div class="table-responsive">
-      <table st-table="displayedCollection" st-safe-src="classes" class="table table-striped table-bordered table-hover table-condensed b-t b-b">
-        <thead>
-        <tr>
-          <th class="text-center col-sm-1">SNo.</th>
-          <th>Service Name</th>
-          <th>Service Cost</th>
-          <th>Duration</th>
-          <th class="text-center">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr data-ng-repeat="service in services" class="text-capitalize">
-          <td class="text-center" data-ng-bind="$index+1"></td>
-          <td>{{ service.name }}</td>
-          <td><i class="fa fa-inr" aria-hidden="true"></i> {{ service.price }}</td>
-          <td>{{ service.time_duration }} minutes</td>
-          <td style="white-space: nowrap" class="text-center">
-            <div class="buttons">
-              <button class="btn btn-sm btn-primary" ng-click="editService(service.id, $index)">Edit</button>
-              <button class="btn btn-sm btn-danger" ng-click="deleteService(service.id, $index)">Delete</button>
-            </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <!-- Service modal -->
+    <!-- Service modal -->
     <script type="text/ng-template" id="add_edit_service">
       <div class="modal-header">
         <h3 class="modal-title" ng-if="!service.id">Add Service</h3>
@@ -59,7 +59,7 @@
             </div>
           </div>
           <div class="form-group clearfix">
-          <div class="col-sm-6">
+            <div class="col-sm-6">
               <label>Price</label>
               <input type="text" class="form-control" data-ng-model="service.price" required>
             </div>

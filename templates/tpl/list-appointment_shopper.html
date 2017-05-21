@@ -1,0 +1,80 @@
+{% verbatim %}
+<div class="bg-light lter b-b wrapper-md">
+  <h1 class="m-n font-thin h3">Appointments</h1>
+</div>
+<div class="wrapper-md" data-ng-controller="ListAppointmentsController"  data-ng-init="itemsByPage=10">
+  <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+  <div class="panel panel-default">
+    <div class="panel-heading text-right">
+      <form class="form-inline" role="form">
+        <select class="form-control" name="items" id="items" data-ng-model="itemsByPage">
+          <option>10</option>
+          <option>25</option>
+          <option>50</option>
+          <option>100</option>
+        </select>
+      </form>
+    </div>
+    <div class="table-responsive">
+      <table st-table="displayedCollection" st-safe-src="classes" class="table table-striped table-bordered table-hover table-condensed b-t b-b">
+        <thead>
+        <tr>
+          <th colspan="6"></th>
+        </tr>
+        <tr>
+          <th class="text-center col-sm-1">SNo.</th>
+          <th>Store</th>
+          <th class="text-center">Shopper Name</th>
+          <th class="text-center">Shopper Contact</th>
+          <th class="text-center">Service Name</th>
+          <th class="text-center">Service Cost</th>
+          <th class="text-center">Date</th>
+          <th class="text-center">Time</th>
+          <th class="text-center">Status</th>
+          <th class="text-center">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-ng-repeat="appointment in appointments">
+          <td class="text-center" data-ng-bind="$index+1"></td>
+          <td class="text-center">{{ appointment.store_detail.name}} ({{ appointment.store_detail.address }})</td>
+          <td class="text-center">{{ appointment.shopper_detail.user_detail.first_name }}</td>
+          <td class="text-center">{{ appointment.shopper_detail.phone_number }}</td>
+          <td class="text-center">{{ appointment.service_detail.name }}</td>
+          <td class="text-center">{{ appointment.service_detail.price }}</td>
+          <td class="text-center">{{ appointment.date|date:"dd-MMM-yyyy"}}</td>
+          <td class="text-center">{{ appointment.start_time|timeFilter}} - {{ appointment.end_time|timeFilter}}</td>
+          <td class="text-center" ng-if="['Booked', 'Cancel', 'Rejected'].indexOf(appointment.status)==-1">{{ appointment.status}}</td>
+          <td class="text-center text-danger" ng-if="appointment.status == 'Cancel'">Cancelled</td>
+          <td class="text-center text-danger" ng-if="appointment.status == 'Rejected'">Rejected</td>
+          <td class="text-center text-success text-capitalize" ng-if="appointment.status == 'Booked'" ui-sref="app.view-personal-assistant({username:appointment.personal_assistant.user_detail.username})">
+            {{ appointment.status }} ({{ appointment.personal_assistant.user_detail.first_name }})</td>
+          <td style="white-space: nowrap" class="text-center">
+            <div class="buttons">
+              <button ng-if="['Booked', 'Cancel', 'Rejected'].indexOf(appointment.status)==-1" class="btn btn-sm btn-danger" ng-click="cancelAppointment(appointment.id, $index)">Cancel</button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Delete Class modal -->
+  <script type="text/ng-template" id="cancel_appointment">
+    <div class="modal-header">
+      <h3 class="modal-title">Delete Appointment ?</h3>
+    </div>
+    <div class="modal-body">
+        <div class="form-group clearfix">
+          Are you sure you want to cancel your appointment for date {{ appointment.date|date:"dd-MMM-yyyy"}} ?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" ng-click="cancel()">No</button>
+          <button type="submit" class="btn btn-danger"
+                  data-ng-click="cancelAppointment()" button-spinner="loading"><span ng-if="!loading">Yes</span>
+          </button>
+        </div>
+    </div>
+  </script>
+</div>
+{% endverbatim %}

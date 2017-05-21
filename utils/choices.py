@@ -15,5 +15,6 @@ APPOINTMENT_STATUS_CHOICES = (
     ('Rejected', 'Rejected'),
     ('Cancel', 'Cancel'),
     ('Missed', 'Missed'),
-    ('Attended', 'Attended')
+    ('Attended', 'Attended'),
+    ("Assigned", "Assigned")
 )
