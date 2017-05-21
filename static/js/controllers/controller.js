@@ -777,3 +777,8 @@ app.controller('ListServiceSubscriptionsController',
     }
   }
 );
+
+app.controller('PAProfileController',function($scope,$stateParams,PersonalAssistantService){
+	console.log("sa");
+	console.log($stateParams.username);
+});

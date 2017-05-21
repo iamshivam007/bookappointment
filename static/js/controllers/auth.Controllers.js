@@ -48,7 +48,7 @@ app.controller('LoginController',
             UserDetailsService.setDetails(success[0]);
             UserDetailsService.setName(success[0].first_name);
             UserDetailsService.setRole($scope.user.role);
-            UserDetailsService.setContact(success[0].phone_number);
+            //UserDetailsService.setContact(success[0].phone_number);
             UserDetailsService.setEmail(success[0].email);
             UserDetailsService.setUID(success[0].id);
             $rootScope.$broadcast('getUserRole');

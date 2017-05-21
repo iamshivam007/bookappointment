@@ -93,6 +93,20 @@ app.run(
             }
           }
         )
+		.state('app.personalassistance/profile', {
+            url: '/personalassistance/profile/:username',
+            templateUrl: '/tpl/blocks/paprofile.html',
+            resolve: {
+              deps: ['$ocLazyLoad',
+                function( $ocLazyLoad ){
+                  return $ocLazyLoad.load([
+                    'smart-table'
+                  ]);
+                }
+              ]
+            }
+          }
+        )
         .state('app.list-appointments', {
             url: 'appointments/',
             templateUrl: '/tpl/list-appointment.html'

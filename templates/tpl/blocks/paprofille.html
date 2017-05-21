@@ -1,0 +1,528 @@
+{% verbatim %}
+<div class="hbox hbox-auto-xs hbox-auto-sm" data-ng-controller="PAProfileController">
+  <div class="col">
+    <toaster-container toaster-options="{'position-class': 'toast-top-right', 'close-button':true}"></toaster-container>
+    <div style="background:url(/dashboard/img/c4.jpg) center center; background-size:cover">
+      <div class="wrapper-lg bg-white-opacity">
+        <div class="row m-t">
+          <div class="col-sm-12">
+            <a href class="thumb-lg pull-left m-r">
+              <!--<img data-ng-src="{{student.photo}}" class="img-circle">-->
+			  <img src="img/1.jpg" class="img-circle">
+            </a>
+            <div class="clear m-b">
+              <div class="m-b m-t-sm">
+                <span class="h3 text-black text-capitalize"
+                      data-ng-bind="shopper.name">
+                </span>
+                <span class="m-l text-uppercase" data-ng-bind="shopper.phone_number"></span>
+				<span class="m-l text-uppercase" data-ng-bind="shopper."></span>
+                <br>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="wrapper-md">
+      <us-spinner></us-spinner>
+      <tabset class="tab-container" ng-init="steps={step1:true, step2:false, step3:false}">
+        <tab heading="Personal Details" active="steps.step1">
+          <form name="personalDetailsForm" class="form-validation" novalidate>
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <div class="form-group pull-in">
+                  <div class="col-sm-6">
+                    <h5><label><b>Date Of Birth:&nbsp;&nbsp;&nbsp;</b></label>
+                      {{student.dob | date: 'dd-MMMM-yyyy'}}</h5>
+                  </div>
+                  <div class="col-sm-6">
+                    <h5><label><b>Blood Group:&nbsp;&nbsp;&nbsp;</b></label>{{student.blood_group}}</h5>
+                  </div>
+                </div>
+                <div class="form-group pull-in">
+                  <div class="col-sm-6">
+                    <h5><label><b>Gender:&nbsp;&nbsp;&nbsp;</b></label>{{student.gender}}</h5>
+                  </div>
+                  <div class="col-sm-6">
+                    <h5><label><b>Admission No:&nbsp;&nbsp;&nbsp;</b></label>{{student.admission_no}}</h5>
+                  </div>
+                </div>
+                <div class="form-group pull-in">
+                  <div class="col-sm-6">
+                    <h5><label><b>Phone Number:&nbsp;&nbsp;&nbsp;</b></label>{{student.phone_number}}</h5>
+                  </div>
+                  <div class="col-sm-6">
+                    <h5><label><b>Location:&nbsp;&nbsp;&nbsp;</b></label>{{student.location}}</h5>
+                  </div>
+                </div>
+                <div class="form-group pull-in">
+                  <div class="col-sm-6">
+                    <h5><label><b>Address Line 1:&nbsp;&nbsp;&nbsp;</b></label>{{student.address_line_1}}</h5>
+                  </div>
+                  <div class="col-sm-6">
+                    <h5><label><b>Address Line 2:&nbsp;&nbsp;&nbsp;</b></label>{{student.address_line_2}}</h5>
+                  </div>
+                </div>
+                <div class="form-group pull-in">
+                  <div class="col-sm-6">
+                    <h5><label><b>Father's Name:&nbsp;&nbsp;&nbsp;</b></label>
+                      {{student.guardians.father.first_name}}
+                      {{student.guardians.father.middle_name}}
+                      {{student.guardians.father.last_name}}</h5>
+                  </div>
+                  <div class="col-sm-6">
+                    <h5><label><b>Father's Occupation:&nbsp;&nbsp;&nbsp;</b></label>
+                      {{student.father_occupation}}</h5>
+                  </div>
+                </div>
+                <div class="form-group pull-in">
+                  <div class="col-sm-6">
+                    <h5><label><b>Mother's Name:&nbsp;&nbsp;&nbsp;</b></label>
+                      {{student.guardians.mother.first_name}}&nbsp;
+                      {{student.guardians.mother.middle_name}}
+                      {{student.guardians.mother.last_name}}</h5>
+                  </div>
+                  <div class="col-sm-6">
+                    <h5><label><b>Mother's Occupation:&nbsp;&nbsp;&nbsp;</b></label>
+                      {{student.mother_occupation}}</h5>
+                  </div>
+                </div>
+                <div class="form-group pull-in">
+                  <div class="col-sm-6">
+                    <h5><label><b>Emergency Guardian Name:&nbsp;&nbsp;&nbsp;</b></label>
+                      {{student.guardians.emergency_guardian.first_name}}&nbsp;
+                      {{student.guardians.emergency_guardian.middle_name}}&nbsp;
+                      {{student.emergency_guardian.last_name}}</h5>
+                  </div>
+                  <div class="col-sm-6">
+                    <h5><label><b>Relation Name:&nbsp;&nbsp;&nbsp;</b></label>
+                      {{student.guardians.emergency_guardian.relation_name}}</h5>
+                  </div>
+                </div>
+              </div>
+              <footer class="panel-footer text-right bg-light lter">
+                <button type="button" class="btn btn-info" ui-sref="app.list-students">Back</button>
+                <button type="button" class="btn btn-success">Print</button>
+              </footer>
+            </div>
+          </form>
+        </tab>
+        <tab heading="Attendance" ng-controller="StudentAttendanceCalendarController" select="renderCalendar()">
+          <div class="container">
+            <table>
+              <tbody>
+              <us-spinner></us-spinner>
+              <tr>
+                <td>
+                  <span style="width: 20px; height: 20px; background-color: #00cc00; display: block;"></span>
+                </td>
+                <td>
+                  <strong style="margin-left: 20px; margin-right: 20px">Present</strong>
+                </td>
+                <td>
+                  <span style="width: 20px; height: 20px; background-color: #f05050; display: block;"></span>
+                </td>
+                <td>
+                  <strong style="margin-left: 20px; margin-right: 20px">Absent</strong>
+                </td>
+                <td>
+                  <span style="width: 20px; height: 20px; background-color: #fad733; display: block;"></span>
+                </td>
+                <td valign="middle" style="vertical-align: middle !important;">
+                  <strong style="margin-left: 20px; margin-right: 20px">Late</strong>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="hbox hbox-auto-xs hbox-auto-sm">
+            <div class="col wrapper-md">
+              <div class="pos-rlt">
+                <div class="calendar" ng-model="eventSources" config="uiConfig.calendar"
+                     ui-calendar="uiConfig.calendar"></div>
+              </div>
+            </div>
+          </div>
+        </tab>
+        <!--Subjects List-->
+        <tab heading="Subjects">
+          <div class="table-responsive">
+            <table st-table="displayedCollection" st-safe-src="teachingships" class="table table-striped
+            table-bordered table-hover table-condensed b-t b-b text-capitalize">
+              <thead>
+              <tr>
+                <th colspan="10"><input st-search="" class="form-control" placeholder="Search" type="text"/></th>
+              </tr>
+              <tr>
+                <th class="text-center">SNo.</th>
+                <th class="text-center" st-sort="subject">Subject Name</th>
+                <th class="text-center" st-sort="teacher.teacher_name">Subject Teacher</th>
+              </tr>
+              </thead>
+              <tbody>
+              <us-spinner></us-spinner>
+              <!--<tr data-ng-repeat="student in displayedCollection" st-select-row="row">-->
+              <tr data-ng-repeat="teaching in teachingships">
+                <td class="text-center" data-ng-bind="$index+1">1</td>
+                <td class="text-center" data-ng-bind="teaching.subject_name"></td>
+                <td class="text-center" data-ng-bind="teaching.teacher_name"></td>
+              </tr>
+              </tbody>
+              <tfoot><tr><td colspan="10" class="text-center"></td></tr></tfoot>
+            </table>
+          </div>
+        </tab>
+        <!--Subject List-->
+        <!--Fees Receipt List-->
+        <tab heading="Fees Transaction">
+          <div class="table-responsive">
+            <table st-table="displayedCollection" st-safe-src="feesReceipts" class="table table-striped
+            table-bordered table-hover table-condensed b-t b-b text-capitalize">
+              <thead>
+              <tr>
+                <th colspan="10"><input st-search="" class="form-control" placeholder="Search" type="text"/></th>
+              </tr>
+              <tr>
+                <th>Date</th>
+                <th>Receipt No.</th>
+                <th>Receipt Type</th>
+                <th>Month</th>
+                <th>Old Dues</th>
+                <th>Billing Amount</th>
+                <th>Action</th>
+              </thead>
+              <tbody>
+              <us-spinner></us-spinner>
+              <tr data-ng-repeat="feesReceipt in feesReceipts">
+                <td data-ng-bind="feesReceipt.paid_on"></td>
+                <td data-ng-bind="feesReceipt.receipt_no"></td>
+                <td data-ng-bind="feesReceipt.fees_deposit_type"></td>
+                <td><span data-ng-repeat="month in feesReceipt.months_name_list">{{month}}, </span></td>
+                <td data-ng-bind="feesReceipt.due_fees"></td>
+                <td data-ng-bind="feesReceipt.amount"></td>
+                <td>
+                  <button class="btn btn-info" ng-click="viewFeesReceipt(feesReceipt.receipt_no)">
+                    View
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </tab>
+        <!--Document List-->
+        <tab heading="Documents">
+          <div class="table-responsive">
+            <table st-table="displayedCollection" st-safe-src="feesReceipts" class="table table-striped
+            table-bordered table-hover table-condensed b-t b-b">
+              <thead>
+              <tr>
+                <th>Name</th>
+                <th>Action</th>
+              </thead>
+              <tbody>
+              <us-spinner></us-spinner>
+              <tr data-ng-repeat="document in student.documents">
+                <td data-ng-bind="document.name"></td>
+                <td>
+                  <a class="btn btn-info" href="{{document.file}}" target="_blank">
+                    View
+                  </a>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </tab>
+      </tabset>
+    </div>
+  </div>
+  <!-- Student ID modal -->
+  <script type="text/ng-template" id="student_ID">
+    <div class="modal-body id bg-grid-line" id="student_id_card" style="padding-left: 26%">
+      <table style="height: 602px; border: none;" width="583">
+        <tbody>
+        <tr>
+          <td>
+            <table style="height: 185px; margin-left: 50px; border: 1px solid;" width="174">
+              <tbody>
+              <tr>
+                <td style="vertical-align: top;">
+                  <img class="img-circle-id" data-ng-src="{{school.logo}}" alt="school logo"
+                       style="margin:1% 0% 0% 0%">
+                </td>
+                <td style="text-align:center;background:gainsboro" id="school_name">{{school.name}}</td>
+              </tr>
+              <tr>
+                <td style="vertical-align: top;">&nbsp;</td>
+                <td style="vertical-align: middle;">&nbsp;</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td style="vertical-align: top;">
+                  <table style="height: 104px;" width="156">
+                    <tbody>
+                    <tr>
+                      <td colspan="3" align="center">
+                        <img class="thumb img" src="{{student.photo}}" style="margin-left: -17%">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="3" align="center">
+                        <p style="margin-left:-14%">
+                          {{student.first_name}} {{student.middle_name}} {{student.last_name}}
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="2">&nbsp;class :</td>
+                      <td> {{student.classship.name}}{{student.classship.section}}</td>
+                    </tr>
+                    <tr>
+                      <td colspan="2">&nbsp;Adm no.</td>
+                      <td>{{student.admission_no}}</td>
+                    </tr>
+                    <tr>
+                      <td colspan="2">&nbsp;Valid till</td>
+                      <td>{{school.academic_year.end_date | date: 'dd-MMMM-yyyy'}}</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td style="vertical-align: top;" colspan="2">
+                  <table style="height: 32px;" width="187">
+                    <tbody>
+                    <tr>
+                      <td>&nbsp;</td>
+                      <td style="text-align: center;">
+                        <p style="background:gainsboro;margin:0% 0% -8% -2%" id="footer">
+                          STUDENT IDENTITY CARD
+                        </p>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            &nbsp;
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table style="height: 218px; margin-left: 50px;" width="278px">
+              <thead>
+              <tr>
+                <td colspan="2">
+                  <table style="border: 1px solid;width:70%" >
+                    <thead>
+                    <tr>
+                      <td>&nbsp;&nbsp;Father'sName&nbsp;</td>
+                      <td>{{student.guardian.name}}</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;Blood Gruop&nbsp;</td>
+                      <td>{{student.blood_group}}</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;Date of Birth&nbsp;</td>
+                      <td>{{student.dob | date: 'dd-MMMM-yyyy'}}</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;Contact&nbsp;</td>
+                      <td>{{student.guardian.contact}}</td>
+                    </tr>
+                    <tr>
+                      <td>&nbsp;&nbsp;Address&nbsp;</td>
+                      <td>{{student.address_line_1}}</td>
+                    </tr>
+                    </thead>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="3">
+                  <table style="height: 38px;border: 1px solid;" width="194px">
+                    <tbody>
+                    <tr>
+                      <td style="text-align: center;margin-top: 5%"><p>INSTRUCTION</p></td>
+                    </tr>
+                    <tr>
+                      <td style="text-align: left; vertical-align: top;">
+                        <ol style="margin-left: -10%">
+                          <li><p>The holder of this card is registered Student</p></li>
+                          <li><p>The holder of this card is registered Student</p></li>
+                        </ol>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+              </thead>
+            </table>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <hr style="margin: 3% 0 8% 0">
+    <button class="btn btn-primary pull-right" ng-print print-element-id="student_id_card"
+            style="margin:-7% 5% 0 0"><i class="fa fa-print"></i> Print</button>
+  </script>
+  <!-- Student ID modal -->
+  <!-- Student TC modal -->
+  <script type="text/ng-template" id="student_TC">
+    <div class="modal-body" id="transfer_certificate">
+      <header class="header_tc_modal">
+        <div class="row">
+          <div class="col-md-12" style="text-align: center">
+            <img class="img-circle" data-ng-src="{{school.logo}}" style="width: 90px; height: 90px;margin-top:0%;" alt="school logo">
+            <!--<h4 class="text-left" style="margin-left: 10%;">S.N0.Mig/2016/ &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #a6a6a6; font-size: 20px;">1879167</span></h4>-->
+          </div>
+          <div class="col-md-12 ">
+            <h1 STYLE="text-align: center" class="school_name" >{{school.name}}</h1>
+            <h5 STYLE="text-align: center" class="board">(Affiliated to {{school.board}}, Affiliation Code NO, {{school.affiliation_no}})</h5>
+            <h4 STYLE="text-align: center" class="school_address">{{school.location}}</h4>
+            <h5 STYLE="text-align: center" class="school_code">(School Code No. 875)</h5>
+            <p style="text-align: center" class="tc_heading" ><b style="font-size: 30px">Transfer Certificate</b></p>
+          </div>
+          <div class="col-md-1"></div>
+        </div>
+      </header>
+      <div class="body_tc">
+        <table class="table" style="border:none">
+          <thead>
+          <tr>
+            <td></td>
+            <!--<td colspan="2"><b>S.No</b> &nbsp;&nbsp;6546</td>-->
+            <td><b>Admission No</b>.&nbsp;&nbsp;{{student.admission_no}}</td>
+          </tr>
+          </thead>
+          <tbody>
+          <tr style="border: hidden">
+            <td >1</td>
+            <td>Student Name :</td>
+            <td>{{student.first_name}} {{student.middle_name}} {{student.last_name}}</td>
+          </tr>
+          <tr style="border: hidden">
+            <td>2</td>
+            <td>Father Name :</td>
+            <td>
+              {{student.guardians.father.first_name}}
+              {{student.guardians.father.middle_name}}
+              {{student.guardians.father.last_name}}
+            </td>
+          </tr>
+          <tr style="border: hidden">
+            <td>3</td>
+            <td>Mother Name :</td>
+            <td>
+              {{student.guardians.mother.first_name}}
+              {{student.guardians.mother.middle_name}}
+              {{student.guardians.mother.last_name}}
+            </td>
+          </tr>
+          <tr style="border: hidden">
+            <td>4</td>
+            <td>Date of admission :</td>
+            <td>{{student.admission_date | date:'dd-MMMM-yyyy'}}</td>
+          </tr>
+          <tr style="border: hidden">
+            <td>5</td>
+            <td>Date of Birth:</td>
+            <td>{{student.dob |  date:'dd-MMMM-yyyy'}}</td>
+          </tr>
+          <tr style="border: hidden">
+            <td>6</td>
+            <td>Class in which the Student studied</td>
+            <td>{{student.classship.name}}&nbsp;&nbsp;{{student.classship.section}}</td>
+          </tr><tr style="border: hidden">
+            <td>7</td>
+            <td>Due Fees</td>
+            <td><i class="fa fa-inr" aria-hidden="true"></i> {{student.estimated_fees - student.total_paid_fees}}</td>
+          </tr>
+          <tr style="border: hidden">
+            <td>8</td>
+            <td>Date of issue of certificate</td>
+            <td>{{date | date:'dd-MMMM-yyyy'}}</td>
+          </tr>
+          <tr style="border: hidden">
+            <td>9</td>
+            <td>Whether qualified for promotion to the higher class<br> if so, in which class</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td colspan="2">-------------------------------------------------------------------------------------------------------------</td>
+          </tr>
+          <tr style="border: hidden">
+            <td>10</td>
+            <td>Games played or extra curricular activities <br>in which the student usually took part</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td colspan="2">-------------------------------------------------------------------------------------------------------------</td>
+          </tr>
+          <tr style="border: hidden">
+            <td>11</td>
+            <td>Reason for leaving the school
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td colspan="2">---------------------------------------------------------------------------------------------------------------</td>
+          </tr>
+          <tr style="border: hidden">
+            <td>12</td>
+            <td>Any other Remark</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td colspan="2">----------------------------------------------------------------------------------------------------------------</td>
+          </tr>
+          <tr style="border: hidden">
+            <td></td>
+            <td style="padding-top: 7%">signature of <br>class teacher</td>
+            <td style="padding-top: 7%">signature of <br>Principal</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="row">
+        <hr style="
+            background-color: #f0f0f0;
+            width: 100%;
+            border-top: 1px solid #8c8b8b;
+            ">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" ng-click="cancel()">Close</button>
+      <button class="btn btn-primary pull-right" ng-print print-element-id="transfer_certificate">
+        <i class="fa fa-print"></i> Print
+      </button>
+      <button data-ng-disabled="!student.is_active" class="btn btn-success pull-right" type="button" ng-click="deactivateStudent(student)">Transfer</button>
+    </div>
+    <!--</div>-->
+  </script>
+  <!-- Student TC modal -->
+  <!-- View Fees  Receipt modal -->
+  <script type="text/ng-template" id="viewFeesReceipt">
+    <div class="modal-body" id="feesReceipt">
+      <form name="addClassForm" class="form-validation" novalidate>
+        <div data-ng-include=" '/tpl/fees_tpl/fees_receipt_profile.html' "></div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" ng-print print-element-id="feesReceipt"><i class="fa fa-print"></i> Print</button>
+    </div>
+  </script>
+</div>
+{% endverbatim %}
