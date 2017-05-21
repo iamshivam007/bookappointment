@@ -75,7 +75,7 @@ app.controller('SignUpController',
     $scope.loading = false;
     $scope.signupButtonDisabled = false;
     $scope.signup = function () {
-      // $scope.user.phone_number = $scope.user.phone_number;
+      $scope.user.phone_number = '+91'+$scope.user.phone_number;
       $scope.loading = true;
       $scope.signupButtonDisabled = true;
       SignupService.one().customPOST($scope.user).then(

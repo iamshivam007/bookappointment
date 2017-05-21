@@ -25,8 +25,12 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
     def get_roles(self, user):
-        if StoreAdmin.objects.filter(user=user):
-            return ['Store Admin', 'Shopper', 'Personal Assistant']
+        if isinstance(user, dict):
+            if StoreAdmin.objects.filter(user__username=user['username']):
+                return ['Store Admin', 'Shopper', 'Personal Assistant']
+        else:
+            if StoreAdmin.objects.filter(user=user):
+                return ['Store Admin', 'Shopper', 'Personal Assistant']
         return ['Shopper', 'Personal Assistant']
 
     def validate_email(self, email):
@@ -41,7 +45,6 @@ class UserSerializer(serializers.ModelSerializer):
 
     def save(self, request):
         phone_number = request.data.get('phone_number')
-        role = request.data.get('role')
         validated_data = dict(username=request.data['username'], email=request.data['email'])
         validated_data['password'] = request.data['password1']
         validated_data['first_name'] = request.data.get('first_name')
