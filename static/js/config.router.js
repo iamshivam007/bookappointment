@@ -93,8 +93,8 @@ app.run(
             }
           }
         )
-		.state('app.personalassistance/profile', {
-            url: '/personalassistance/profile/:username',
+		.state('app.personalassistance.profile', {
+            url: 'personalassistance/profile/:username/',
             templateUrl: '/tpl/blocks/paprofile.html',
             resolve: {
               deps: ['$ocLazyLoad',
