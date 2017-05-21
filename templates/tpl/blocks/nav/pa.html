@@ -1,15 +1,16 @@
+{% verbatim %}
 <!-- list -->
 <ul class="nav">
   <!-- Store -->
   <li>
-    <a class="auto" ui-sref="app.list-stores">
-      <i class="fa fa-institution icon text-success"></i>
-      <span class="text-success">Store</span>
+    <a class="auto" ui-sref="app.view-personal-assistant({username:user.username})">
+      <i class="fa fa-user icon text-success"></i>
+      <span class="text-success">Profile</span>
     </a>
     <ul class="nav nav-sub dk">
       <li class="nav-sub-header">
-        <a ui-sref="app.list-stores">
-          <span class="text-black">Store</span>
+        <a ui-sref="app.view-personal-assistant({username:user.username})">
+          <span class="text-black">Profile</span>
         </a>
       </li>
     </ul>
@@ -32,3 +33,4 @@
   <!-- Appointment -->
 </ul>
 <!-- / list -->
+{% endverbatim %}

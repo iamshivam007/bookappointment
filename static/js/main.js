@@ -78,11 +78,13 @@ angular.module('app')
       if (!$scope.userID){
         $scope.userRole = UserDetailsService.getRole();
         $scope.userID = UserDetailsService.getUID();
+        $scope.user = UserDetailsService.getDetails();
       }
       // Dynamic template loading based on User role.
       // $scope.userRole = UserDetailsService.getRole();
       $scope.$on('getUserRole', function () {
         $scope.userRole = UserDetailsService.getRole();
         $scope.userID = UserDetailsService.getUID();
+        $scope.user = UserDetailsService.getDetails();
       });
     });

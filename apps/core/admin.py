@@ -35,7 +35,7 @@ class PersonalAssistantAdmin(admin.ModelAdmin):
 
 @admin.register(Store)
 class StoreAdmin(admin.ModelAdmin):
-    list_display = [f.name for f in Store._meta.fields]
+    list_display = [f.name for f in Store._meta.fields if f.name != 'working_days']
 
 
 @admin.register(Service)
@@ -56,3 +56,18 @@ class RoleSubscriptionAdmin(admin.ModelAdmin):
 @admin.register(StoreSubscription)
 class StoreSubscriptionAdmin(admin.ModelAdmin):
     list_display = [f.name for f in StoreSubscription._meta.fields]
+
+
+@admin.register(Role)
+class RoleAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in Role._meta.fields]
+
+
+@admin.register(Skill)
+class SkillAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in Skill._meta.fields]
+
+
+@admin.register(SkillRoleRelation)
+class SkillRoleRelationAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in SkillRoleRelation._meta.fields]
