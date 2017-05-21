@@ -26,10 +26,10 @@
           <th>Store</th>
           <th class="text-center">Shopper Name</th>
           <th class="text-center">Shopper Contact</th>
-          <th class="text-center">Service Name</th>
-          <th class="text-center">Service Cost</th>
+          <th class="text-center">Service</th>
+          <th class="text-center">Cost</th>
           <th class="text-center">Date</th>
-          <!--<th class="text-center">Time</th>!-->
+          <th class="text-center">Time</th>
           <th class="text-center">Status</th>
           <th class="text-center">Action</th>
         </tr>
@@ -43,15 +43,16 @@
           <td class="text-center">{{ appointmentship.appointment_detail.service_detail.name }}</td>
           <td class="text-center">{{ appointmentship.appointment_detail.service_detail.price }}</td>
           <td class="text-center">{{ appointmentship.appointment_detail.date|date:"dd-MMM-yyyy"}}</td>
-          <!--<td class="text-center">{{ appointmentships.appointment_detail.start_time|timeFilter}} - {{ appointment.end_time|timeFilter}}</td>!-->
-          <td class="text-center" ng-if="['Booked', 'Cancel', 'Rejected'].indexOf(appointment.status)==-1">{{ appointment.status}}</td>
+          <td class="text-center">{{ appointmentship.appointment_detail.start_time|timeFilter}} - {{ appointmentship.appointment_detail.end_time|timeFilter}}</td>
+          <td class="text-center" ng-if="['Booked', 'Cancel', 'Rejected'].indexOf(appointmentship.appointment_detail.status)==-1">{{ appointmentship.appointment_detail.status}}</td>
           <td class="text-center text-danger" ng-if="appointmentship.appointment_detail.status == 'Cancel'">Cancelled</td>
           <td class="text-center text-danger" ng-if="appointmentship.appointment_detail.status == 'Rejected'">Rejected</td>
-          <td class="text-center text-success text-capitalize" ng-if="appointmentship.appointment_detail.status == 'Booked'" ui-sref="app.view-personal-assistant({username:appointment.personal_assistant.user_detail.username})">
+          <td class="text-center text-success text-capitalize" ng-if="appointmentship.appointment_detail.status == 'Booked'" ui-sref="app.view-personal-assistant({username:appointmentship.appointment_detail.personal_assistant.user_detail.username})">
             {{ appointmentship.appointment_detail.status }} ({{ appointmentship.appointment_detail.personal_assistant.user_detail.first_name }})</td>
           <td style="white-space: nowrap" class="text-center">
             <div class="buttons">
-              <button ng-if="['Booked', 'Cancel', 'Rejected'].indexOf(appointmentship.appointment_detail.status)==-1" class="btn btn-sm btn-success" ng-click="acceptAppointment(appointment.appointment_detail.id, $index)">Accept</button>
+              <button ng-if="['Booked', 'Cancel', 'Rejected'].indexOf(appointmentship.appointment_detail.status)==-1" class="btn-sm btn-success" ng-click="acceptAppointment(appointmentship, $index)">Accept</button>
+              <button ng-if="['Booked', 'Cancel', 'Rejected'].indexOf(appointmentship.appointment_detail.status)==-1" class="btn-sm btn-danger" ng-click="rejectAppointment(appointmentship, $index)">Reject</button>
             </div>
           </td>
         </tr>

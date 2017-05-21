@@ -89,6 +89,7 @@ class AppointmentFilterSet(drf_filters.FilterSet):
 
 class AppointmentShipFilterSet(drf_filters.FilterSet):
     personal_assistant = drf_filters.RelatedFilter(PersonalAssistantFilterSet)
+    appointment = drf_filters.RelatedFilter(AppointmentFilterSet)
 
     class Meta:
         model = AppointmentShip

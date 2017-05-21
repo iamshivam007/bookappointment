@@ -171,9 +171,9 @@ app.controller('BookAppointmentController',
     $scope.appointment = {};
     var UserID = UserDetailsService.getUID();
 
-    StoresService.one('', id).get().then(
+    StoresService.one(id).get().then(
       function (success) {
-        $scope.store = success[0];
+        $scope.store = success;
         $scope.appointment.store = id;
         getServices();
       }
@@ -324,50 +324,68 @@ app.controller('ListAppointmentShipsController',
             UserDetailsService) {
 
     var query_param = {personal_assistant__user:UserDetailsService.getUID()};
+    query_param.appointment__status__in = ['Booked', 'Under Process', 'Missed', 'Attended'];
     AppointmentShipService.one().get(query_param).then(
       function (success) {
         $scope.appointmentships = success;
+        for(var i=0;i<success.length;i++){
+          if ($scope.appointmentships[i].status == 'Rejected'){
+            $scope.appointmentships[i].appointment_detail.status = 'Rejected';
+          }
+        }
       }
     );
 
-    $scope.cancelAppointment = function (id, index) {
-      var cancelAppointmentModalInstance = $modal.open({
-          templateUrl: "cancel_appointment",
-          controller: "AppointmentController",
-          size: undefined,
-          resolve: {
-            id: function () {
-              return id
-            }
-          }
+    $scope.acceptAppointment = function (appointmentship, index) {
+      appointmentship.status = 'Booked';
+      AppointmentShipService.one(appointmentship.id).patch(appointmentship).then(
+        function (success) {
+          $scope.appointmentships[index] = success.plain();
+          $scope.appointmentships[index].appointment_detail.status = 'Booked';
+          ToasterService.successHandler("Appointment", "Accepted Successfully");
+          $scope.deleteOtherAppointment(success);
+          appointmentship.appointment_detail.status = 'Booked';
+          AppointmentsService.one(appointmentship.appointment).patch(appointmentship.appointment_detail).then(
+            function () {}
+          )
         }
       );
-      cancelAppointmentModalInstance.result.then(
-        function (appointment) {
-          $scope.appointments[index] = angular.copy(appointment);
-          ToasterService.successHandler("Appointment", "Canceled Successfully")
+    };
+
+    $scope.deleteOtherAppointment = function (appointmentship) {
+      var query_params = {appointment:appointmentship.appointment, status:'Under Process'};
+      AppointmentShipService.one().get(query_params).then(
+        function (success) {
+          var appointments = success;
+          for(var i=0;i<appointments.length;i++){
+            $scope.deleteAppointment(appointments[i]);
+          }
+        },
+        function (error) {
+          console.log(error);
+        }
+      );
+    };
+
+    $scope.deleteAppointment = function (appointment) {
+      AppointmentShipService.one(appointment.id).remove().then(
+        function (success) {
+        },
+        function (error) {
+          console.log(error);
         }
       )
     };
 
-    $scope.rejectAppointment = function (id, index) {
-      var rejectAppointmentModalInstance = $modal.open({
-          templateUrl: "reject_appointment",
-          controller: "AppointmentController",
-          size: undefined,
-          resolve: {
-            id: function () {
-              return id
-            }
-          }
+    $scope.rejectAppointment = function (appointmentship, index) {
+      appointmentship.status = 'Rejected';
+      AppointmentShipService.one(appointmentship.id).patch(appointmentship).then(
+        function (success) {
+          $scope.appointmentships[index] = success.plain();
+          $scope.appointmentships[index].appointment_detail.status = 'Rejected';
+          ToasterService.successHandler("Appointment", "Rejected Successfully");
         }
       );
-      rejectAppointmentModalInstance.result.then(
-        function (appointment) {
-          $scope.appointments[index] = angular.copy(appointment);
-          ToasterService.successHandler("Appointment", "Rejected Successfully")
-        }
-      )
     };
   }
 );
