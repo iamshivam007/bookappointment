@@ -1147,3 +1147,26 @@ app.controller('PAProfileController',
     };
   }
 );
+
+app.controller('ShopperProfileController',
+  function ($scope, $stateParams, ShopperService, AppointmentsService) {
+
+    $scope.username = $stateParams.username;
+
+    ShopperService.one().get({user__username:$scope.username}).then(
+      function (success) {
+        $scope.shopper = success[0];
+        $scope.getAppointments();
+      }
+    );
+
+    $scope.getAppointments = function () {
+      AppointmentsService.one().get({shopper:$scope.shopper.id}).then(
+        function (success) {
+          $scope.appointments = success;
+        }
+      )
+    };
+
+  }
+);

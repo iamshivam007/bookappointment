@@ -38,7 +38,8 @@
         <tr data-ng-repeat="appointmentship in appointmentships">
           <td class="text-center" data-ng-bind="$index+1"></td>
           <td class="text-center">{{ appointmentship.appointment_detail.store_detail.name}} ({{ appointmentship.appointment_detail.store_detail.address }})</td>
-          <td class="text-center">{{ appointmentship.appointment_detail.shopper_detail.user_detail.first_name }}</td>
+          <td class="text-center" ui-sref="app.view-shopper({username:appointmentship.appointment_detail.shopper_detail.user_detail.username})">
+            {{ appointmentship.appointment_detail.shopper_detail.user_detail.first_name }}</td>
           <td class="text-center">{{ appointmentship.appointment_detail.shopper_detail.phone_number }}</td>
           <td class="text-center">{{ appointmentship.appointment_detail.service_detail.name }}</td>
           <td class="text-center">{{ appointmentship.appointment_detail.service_detail.price }}</td>

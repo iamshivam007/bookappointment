@@ -121,6 +121,20 @@ app.run(
             }
           }
         )
+        .state('app.view-shopper', {
+            url: 'user/:username/',
+            templateUrl: '/tpl/shopper_profile.html',
+            resolve: {
+              deps: ['$ocLazyLoad',
+                function( $ocLazyLoad ){
+                  return $ocLazyLoad.load([
+                    'smart-table'
+                  ]);
+                }
+              ]
+            }
+          }
+        )
         .state('app.list-appointments', {
             url: 'appointments/',
             templateProvider: function (UserDetailsService, $templateFactory) {

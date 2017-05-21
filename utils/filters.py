@@ -73,6 +73,8 @@ class SkillRoleRelationFilterSet(drf_filters.FilterSet):
 
 
 class ShopperFilterSet(drf_filters.FilterSet):
+    user = drf_filters.RelatedFilter(UserFilterSet)
+
     class Meta:
         model = Shopper
 
